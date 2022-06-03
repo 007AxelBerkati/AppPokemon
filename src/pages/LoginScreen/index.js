@@ -151,7 +151,7 @@ function LoginScreen({ navigation }) {
                       };
                       dispatch(setLoading(false));
                       showSuccess('Login Sukses');
-                      navigation.replace('DashboardScreen');
+                      navigation.replace('DashboardPokemonScreen');
                       databaseRef()
                         .ref(`users/${res.user.uid}/`)
                         .set(data);

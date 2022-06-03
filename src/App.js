@@ -2,13 +2,14 @@ import React from 'react';
 import { StatusBar } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { Provider, useSelector } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Loading } from './component';
-import { Store } from './redux';
+import { Persistore, Store } from './redux';
 import Router from './router';
 import { colors } from './utils';
 
 function MainApp() {
-  const stateGlobal = useSelector((state) => state);
+  const stateGlobal = useSelector((state) => state.dataGlobal);
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor={colors.background.secondary} />
@@ -21,7 +22,9 @@ function MainApp() {
 function App() {
   return (
     <Provider store={Store}>
-      <MainApp />
+      <PersistGate loading={null} persistor={Persistore}>
+        <MainApp />
+      </PersistGate>
     </Provider>
   );
 }

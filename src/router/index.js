@@ -12,7 +12,7 @@ import { navigate, navigationRef } from './RootNavigation';
 const Stack = createNativeStackNavigator();
 
 function Router() {
-  const [initialRoute, setInitialRoute] = useState('DashboardPokemonScreen');
+  const [initialRoute, setInitialRoute] = useState('SplashScreen');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

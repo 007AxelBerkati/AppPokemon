@@ -1,1 +1,6 @@
 export const SET_LOADING = '@SET_LOADING';
+
+// Dashboard
+export const GET_POKEMON_SUCCESS = '@GET_POKEMON_SUCCESS';
+export const GET_POKEMON_FAILURE = '@GET_POKEMON_FAILURE';
+export const GET_POKEMON_LOADING = '@GET_POKEMON_LOADING';
