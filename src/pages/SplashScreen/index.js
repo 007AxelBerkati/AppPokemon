@@ -12,9 +12,9 @@ import {
 function SplashScreen({ navigation }) {
   useEffect(() => {
     onLogScreenView('SplashScreen');
-    // setTimeout(() => {
-    //   navigation.replace('LoginScreen');
-    // }, 3000);
+    setTimeout(() => {
+      navigation.replace('LoginScreen');
+    }, 3000);
 
     // const subscriber = auth().onAuthStateChanged((user) => {
     //   if (user) {
