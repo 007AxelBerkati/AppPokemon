@@ -4,7 +4,7 @@ import React from 'react';
 function DashboardPokemonScreen() {
   return (
     <View style={styles.pages}>
-      <Text>Dashboard test sonar cloud</Text>
+      <Text>Dashboard test husky eslint</Text>
     </View>
   );
 }
