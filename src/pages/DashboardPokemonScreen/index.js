@@ -2,6 +2,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
 function DashboardPokemonScreen() {
+  console.log(props);
+  const dummy = data;
   return (
     <View style={styles.pages}>
       <Text>Dashboard test husky eslint</Text>
