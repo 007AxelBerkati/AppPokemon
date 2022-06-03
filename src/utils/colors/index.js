@@ -19,6 +19,7 @@ export const colors = {
   background: {
     primary: 'white',
     secondary: mainColors.orange1,
+    black: mainColors.black1,
   },
   button: {
     primary: {

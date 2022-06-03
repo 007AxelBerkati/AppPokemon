@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-paper';
 import { colors, fonts } from '../../../utils';
 
 function Input2({
-  onChangeText, value, label, error, onBlur, cannotEdited, secureTextEntry, leftIcon,
+  onChangeText, value, label, onBlur, cannotEdited, secureTextEntry, leftIcon,
 }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   return (
@@ -26,7 +26,7 @@ function Input2({
           <TextInput.Icon
             name={passwordVisible ? 'eye' : 'eye-off'}
             onPress={() => setPasswordVisible(!passwordVisible)}
-            color={passwordVisible ? colors.background.secondary : colors.warning}
+            color={passwordVisible ? colors.background.black : colors.warning}
           />
         ) : null}
 
