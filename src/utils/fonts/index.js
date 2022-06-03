@@ -9,4 +9,9 @@ export const fonts = {
     900: 'Nunito-Black',
     normal: 'Nunito-Regular',
   },
+
+  secondary: {
+    pokemonStyle1: 'Pokemon-Hollow',
+    pokemonStyle2: 'Pokemon-Solid',
+  },
 };
