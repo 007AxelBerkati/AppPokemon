@@ -139,8 +139,11 @@ const styles = StyleSheet.create({
   },
 
   animationText: {
-    color: colors.text.primary,
-    fontFamily: fonts.primary[700],
+    color: colors.text.tertiary,
+    fontFamily: fonts.secondary.pokemonStyle2,
+    textShadowColor: colors.shadowText,
+    textShadowRadius: 10,
+    textShadowOffset: { width: 5, height: 5 },
     fontSize: 30,
     shadowColor: colors.background.secondary,
     shadowOffset: {

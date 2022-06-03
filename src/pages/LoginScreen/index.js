@@ -189,12 +189,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  titleText: {
-    position: 'absolute',
-    top: windowHeight * 0.1,
-    alignSelf: 'center',
 
-  },
   linkWrapper: {
     alignItems: 'flex-end',
     marginLeft: windowWidth / 2,
@@ -214,12 +209,14 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
+
   loginText: {
     fontFamily: fonts.primary[700],
     fontSize: 24,
     marginTop: 12,
     marginBottom: 4,
-    color: colors.text.black,
+    color: colors.text.primary,
+
   },
 
   loginButton: {
@@ -267,8 +264,11 @@ const styles = StyleSheet.create({
   },
 
   animationText: {
-    color: colors.text.primary,
-    fontFamily: fonts.primary[700],
+    color: colors.text.tertiary,
+    fontFamily: fonts.secondary.pokemonStyle2,
+    textShadowColor: colors.shadowText,
+    textShadowRadius: 10,
+    textShadowOffset: { width: 5, height: 5 },
     fontSize: 30,
     shadowColor: colors.background.secondary,
     shadowOffset: {

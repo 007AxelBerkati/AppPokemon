@@ -1,19 +1,20 @@
+// import auth from '@react-native-firebase/auth';
+import LottieView from 'lottie-react-native';
 import React, { useEffect } from 'react';
 import {
-  StyleSheet, Text, View, Image,
+  StyleSheet, Text, View,
 } from 'react-native';
-// import auth from '@react-native-firebase/auth';
+import { pikachu } from '../../assets';
 import {
   colors, fonts, onLogScreenView, windowHeight, windowWidth,
 } from '../../utils';
-import { IconApp } from '../../assets/image';
 
 function SplashScreen({ navigation }) {
   useEffect(() => {
     onLogScreenView('SplashScreen');
-    setTimeout(() => {
-      navigation.replace('LoginScreen');
-    }, 3000);
+    // setTimeout(() => {
+    //   navigation.replace('LoginScreen');
+    // }, 3000);
 
     // const subscriber = auth().onAuthStateChanged((user) => {
     //   if (user) {
@@ -31,8 +32,8 @@ function SplashScreen({ navigation }) {
   }, [navigation]);
   return (
     <View style={styles.page}>
-      <Image style={styles.image} source={IconApp} />
-      <Text style={styles.title}>MyChatting</Text>
+      <LottieView source={pikachu} autoPlay loop style={styles.image} />
+      <Text style={styles.title}>My Pokemon</Text>
       <Text style={styles.nickname}>Axel Berkati</Text>
     </View>
   );
@@ -49,18 +50,22 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    color: colors.text.primary,
-    fontFamily: fonts.primary[800],
+    color: colors.text.tertiary,
+    fontFamily: fonts.secondary.pokemonStyle2,
+    textShadowColor: colors.shadowText,
+    textShadowRadius: 10,
+    textShadowOffset: { width: 5, height: 5 },
+    marginTop: -50,
   },
 
   image: {
-    height: windowHeight * 0.17,
-    width: windowWidth * 0.3,
+    height: windowHeight * 0.27,
+    width: windowWidth * 0.4,
   },
 
   nickname: {
     fontSize: 14,
-    color: colors.text.primary,
+    color: colors.text.secondary,
     fontFamily: fonts.primary[800],
     position: 'absolute',
     bottom: 19,

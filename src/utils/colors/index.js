@@ -10,6 +10,8 @@ const mainColors = {
   dark2: '#495A75',
   red1: '#E06379',
   orange1: '#D18700',
+  yellow1: '#ffcb05',
+  blue1: '#2a75bb',
 };
 
 export const colors = {
@@ -36,6 +38,7 @@ export const colors = {
     primary: mainColors.black1,
     secondary: 'white',
     subtitle: mainColors.grey1,
+    tertiary: mainColors.yellow1,
   },
 
   disable: {
@@ -49,4 +52,5 @@ export const colors = {
   menuActive: mainColors.blue1,
   outlineInput: mainColors.grey2,
   border: mainColors.grey3,
+  shadowText: mainColors.blue1,
 };
