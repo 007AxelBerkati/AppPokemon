@@ -61,7 +61,7 @@ function ForgotPasswordScreen({ navigation }) {
             validationSchema={forgotPasswordSchema}
           >
             {({
-              handleChange, handleBlur, handleSubmit, values, errors, touched,
+              handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty,
             }) => (
               <View>
                 <Input2 leftIcon="email" label="Email" onChangeText={handleChange('email')} value={values.email} onBlur={handleBlur('email')} />
@@ -73,7 +73,7 @@ function ForgotPasswordScreen({ navigation }) {
                   </Text>
                 ) : null}
                 <Gap height={100} />
-                <ButtonComponent title="Send Email" label="Send Email" onPress={handleSubmit} disable={errors.email || stateGlobal.isLoading} />
+                <ButtonComponent title="Send Email" label="Send Email" onPress={handleSubmit} disable={!(isValid && dirty) || stateGlobal.isLoading} />
               </View>
             )}
 

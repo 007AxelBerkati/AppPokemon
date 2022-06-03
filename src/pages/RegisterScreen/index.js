@@ -117,7 +117,7 @@ function RegisterScreen({ navigation }) {
             validationSchema={signupSchema}
           >
             {({
-              handleChange, handleBlur, handleSubmit, values, errors, touched,
+              handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty,
             }) => (
               <View>
                 <Input2 leftIcon="account-circle" label="Fullname" onChangeText={handleChange('fullname')} value={values.fullname} onBlur={handleBlur('fullname')} />
@@ -169,7 +169,7 @@ function RegisterScreen({ navigation }) {
                 ) : null}
 
                 <Gap height={30} />
-                <ButtonComponent title="Register" label="Register" onPress={handleSubmit} disable={(errors.bio && errors.fullname && errors.email && errors.password) || stateGlobal.isLoading} />
+                <ButtonComponent title="Register" label="Register" onPress={handleSubmit} disable={!(dirty && isValid) || stateGlobal.isLoading} />
               </View>
             )}
 

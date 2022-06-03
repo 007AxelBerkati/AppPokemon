@@ -93,7 +93,7 @@ function LoginScreen({ navigation }) {
             validationSchema={loginSchema}
           >
             {({
-              handleChange, handleBlur, handleSubmit, values, errors, touched,
+              handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty,
             }) => (
               <View>
                 <Input2 leftIcon="email" label="Email" onChangeText={handleChange('email')} value={values.email} onBlur={handleBlur('email')} />
@@ -164,7 +164,7 @@ function LoginScreen({ navigation }) {
                   />
                 </View>
                 <Gap height={30} />
-                <ButtonComponent title="Login" onPress={handleSubmit} disable={(errors.email && errors.password) || stateGlobal.isLoading} />
+                <ButtonComponent title="Login" onPress={handleSubmit} disable={!(dirty && isValid) || stateGlobal.isLoading} />
               </View>
             )}
 
