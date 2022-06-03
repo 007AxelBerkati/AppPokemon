@@ -1,17 +1,18 @@
 import React from 'react';
 import {
-  Image, StyleSheet, Text, TouchableOpacity, View,
+  StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { colors, fonts } from '../../../utils';
 
-function DashboardProfile({ photo, title, onPress }) {
+function DashboardProfile({ title, onPress }) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.name}>{title}</Text>
       </View>
-      <TouchableOpacity style={styles.avaWrapper} onPress={onPress}>
-        <Image source={photo} style={styles.avatar} />
+      <TouchableOpacity onPress={onPress}>
+        <Icon name="logout" size={25} />
       </TouchableOpacity>
     </View>
   );
@@ -45,9 +46,11 @@ const styles = StyleSheet.create({
 
   name: {
     fontSize: 23,
-    fontFamily: fonts.primary[600],
-    color: colors.text.black,
-    fontWeight: 'bold',
+    color: colors.text.tertiary,
+    fontFamily: fonts.secondary.pokemonStyle2,
+    textShadowColor: colors.shadowText,
+    textShadowRadius: 10,
+    textShadowOffset: { width: 5, height: 5 },
     marginTop: 4,
   },
   icon: {
@@ -55,8 +58,5 @@ const styles = StyleSheet.create({
     height: 40,
     marginRight: 10,
   },
-  avaWrapper: {
-    borderWidth: 1,
-    borderRadius: 46 / 2,
-  },
+
 });

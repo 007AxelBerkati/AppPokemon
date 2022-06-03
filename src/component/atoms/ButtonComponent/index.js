@@ -3,6 +3,7 @@ import {
   StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import { colors, fonts } from '../../../utils';
+import FloatingButton from './FloatingButton';
 
 import IconButton from './IconButton';
 import IconOnly from './IconOnly';
@@ -24,6 +25,9 @@ export default function ButtonComponent({
         label={label}
       />
     );
+  }
+  if (type === 'floating-btn') {
+    return <FloatingButton icon={icon} onPress={onPress} />;
   }
 
   if (disable) {
