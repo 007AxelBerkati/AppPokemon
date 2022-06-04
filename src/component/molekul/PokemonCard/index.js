@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Text, View, Image, TouchableWithoutFeedback, StyleSheet,
 } from 'react-native';
-import { pokemonColors } from '../../../utils';
+import { colors, fonts, pokemonColors } from '../../../utils';
 
 export default function PokemonCard({ pokemon, onPress }) {
   const pokemonColor = pokemonColors[pokemon.type];
@@ -15,6 +15,10 @@ export default function PokemonCard({ pokemon, onPress }) {
       <View style={styles.card}>
         <View style={styles.card__spacing}>
           <View style={bgStyles}>
+            <Text style={styles.textId}>
+              #
+              {`${pokemon.id}`.padStart(3, 0)}
+            </Text>
             <Image
               style={styles.card__imagePokemon}
               source={{ uri: pokemon.imgUrl }}
@@ -78,5 +82,13 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 15,
     padding: 10,
+  },
+  textId: {
+    color: colors.text.secondary,
+    opacity: 0.8,
+    fontFamily: fonts.primary[800],
+    fontSize: 14,
+    position: 'absolute',
+    right: 10,
   },
 });
