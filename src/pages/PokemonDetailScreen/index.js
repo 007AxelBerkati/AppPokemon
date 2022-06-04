@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import {
   Image, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
+import { IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { About, BaseStats, Moves } from '../../component';
+import {
+  About, BaseStats, Moves,
+} from '../../component';
 import { getDetail } from '../../redux/action/DetailAction';
 import {
   colors, fonts, pokemonColors, windowWidth,
 } from '../../utils';
 
-function PokemonDetailScreen({ route }) {
+function PokemonDetailScreen({ navigation, route }) {
   const dispatch = useDispatch();
   const { id } = route.params;
   const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemon);
@@ -46,6 +49,27 @@ function PokemonDetailScreen({ route }) {
 
   return (
     <View style={bgStyles}>
+      <View style={styles.iconButton}>
+        <View style={{ flex: 1 }}>
+          <IconButton icon="arrow-left" color={colors.primary} onPress={() => navigation.goBack()} />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
+          <View style={{ flexDirection: 'column' }}>
+            <IconButton icon="bag-checked" color={colors.primary} />
+            <Text style={{
+              fontFamily: fonts.primary[600],
+              color: colors.text.secondary,
+              textAlign: 'center',
+              marginTop: -10,
+              fontSize: 12,
+            }}
+            >
+              Catch
+            </Text>
+          </View>
+        </View>
+      </View>
+
       <Text style={styles.text__titleDetail}>{pokemonDetail.name}</Text>
       <View style={{
         flexDirection: 'row',
@@ -146,7 +170,7 @@ const styles = StyleSheet.create({
   },
 
   container__moves: {
-    top: 160,
+    top: 120,
     backgroundColor: colors.text.secondary,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
@@ -156,7 +180,7 @@ const styles = StyleSheet.create({
 
   text__titleDetail: {
     fontSize: 30,
-    margin: 20,
+    marginLeft: 20,
     marginBottom: 10,
     fontFamily: fonts.primary[800],
     color: colors.text.secondary,
@@ -166,7 +190,6 @@ const styles = StyleSheet.create({
     height: 200,
     width: 200,
     position: 'absolute',
-    top: 20,
   },
 
   detail__containerInfo: {
@@ -199,6 +222,13 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 15,
     padding: 10,
+  },
+
+  iconButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginHorizontal: 13,
+    marginVertical: 13,
   },
 
 });
