@@ -1,24 +1,33 @@
-import axios from 'axios';
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList, StyleSheet, View,
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { ButtonComponent, Header } from '../../component';
-import { GET_POKEMON_API } from '../../config';
+import PokemonCard from '../../component/molekul/PokemonCard';
+import { getPokemon } from '../../redux';
 
 function DashboardPokemonScreen({ navigation }) {
+  const dispatch = useDispatch();
+
+  const dataPokemon = useSelector((state) => state.dataPokemon);
   // const [nextPage, setNextPage] = useState(0);
   // const [currentPage, setCurrentPage] = useState(1);
-
-  const fetchPokemon = () => axios.get(`${GET_POKEMON_API}`).then(
-    (res) => console.log('response', res.data),
-  );
   useEffect(() => {
-    fetchPokemon();
+    dispatch(getPokemon(0));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <View style={styles.pages}>
+    <View style={styles.container}>
       <Header type="dashboard-profile" title="My Pokemon" />
-      <Text>Dashboard test husky eslint</Text>
+      <FlatList
+        data={dataPokemon.pokemon}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(pokemon) => String(pokemon.id)}
+        renderItem={({ item }) => <PokemonCard pokemon={item} onPress={() => navigation.navigate('PokemonDetailScreen', item)} />}
+      />
       <ButtonComponent icon="bag-personal" type="floating-btn" onPress={() => navigation.navigate('PokebagScreen')} />
     </View>
   );
@@ -27,8 +36,14 @@ function DashboardPokemonScreen({ navigation }) {
 export default DashboardPokemonScreen;
 
 const styles = StyleSheet.create({
-  pages: {
+  container: {
     flex: 1,
-
+    backgroundColor: '#f4f4f4',
+    // padding: 10,
   },
+  content: {
+    flex: 1,
+    backgroundColor: '#f4f4f4',
+  },
+
 });
