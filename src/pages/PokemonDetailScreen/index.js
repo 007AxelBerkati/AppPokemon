@@ -89,6 +89,7 @@ function PokemonDetailScreen({ route }) {
       <View style={{
         alignItems: 'center',
         elevation: 5,
+        zIndex: 2,
       }}
       >
         <Image
@@ -166,7 +167,6 @@ const styles = StyleSheet.create({
     width: 200,
     position: 'absolute',
     top: 20,
-    backgroundColor: 'yellow',
   },
 
   detail__containerInfo: {
