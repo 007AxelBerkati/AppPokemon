@@ -20,8 +20,25 @@ export const getPokemonLoading = (loading) => ({
 export const getPokemon = (nextPage) => async (dispatch) => {
   dispatch(getPokemonLoading(true));
   await axios.get(`${GET_POKEMON_API}?offset=${nextPage}&limit=20`).then(
-    (res) => {
-      dispatch(getPokemonSuccess(res.data));
+    async (res) => {
+      const result = await res.data.results;
+
+      const pokemonArray = [];
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const pokemon of result) {
+        const pokemonDetailsResponse = await axios.get(pokemon.url);
+        const pokemonDetails = await pokemonDetailsResponse.data;
+
+        pokemonArray.push({
+          id: pokemonDetails.id,
+          name: pokemonDetails.name[0].toUpperCase() + pokemonDetails.name.substring(1),
+          type: pokemonDetails.types[0].type.name,
+          types: pokemonDetails.types,
+          imgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonDetails.id}.png`,
+        });
+      }
+
+      dispatch(getPokemonSuccess(pokemonArray));
       dispatch(getPokemonLoading(false));
     },
   ).catch(
