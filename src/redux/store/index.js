@@ -4,6 +4,7 @@ import reduxLogger from 'redux-logger';
 import { persistReducer, persistStore } from 'redux-persist';
 import ReduxThunk from 'redux-thunk';
 import { pokemonReducer, GlobalReducer } from '../reducer';
+import { pokemonDetailReducer } from '../reducer/DetailReducer';
 
 const persistConfig = {
   key: 'root',
@@ -14,6 +15,7 @@ const persistConfig = {
 const rootReducer = {
   dataGlobal: GlobalReducer,
   dataPokemon: pokemonReducer,
+  dataPokemonDetail: pokemonDetailReducer,
 };
 
 const configPersist = persistReducer(persistConfig, combineReducers(rootReducer));

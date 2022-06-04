@@ -1,10 +1,136 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+  Image, StyleSheet, Text, TouchableOpacity, View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { About, BaseStats, Moves } from '../../component';
+import { getDetail } from '../../redux/action/DetailAction';
+import {
+  colors, fonts, pokemonColors, windowWidth,
+} from '../../utils';
 
-function PokemonDetailScreen() {
+function PokemonDetailScreen({ route }) {
+  const dispatch = useDispatch();
+  const { id } = route.params;
+  const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemon);
+  const [menu, setMenu] = useState('About');
+
+  const pokemonColor = pokemonColors[pokemonDetail.types['0'].type.name];
+  const bgStyles = { ...styles.container, backgroundColor: pokemonColor };
+
+  const listMenuInfo = [
+    {
+      option: 'About',
+    },
+
+    {
+      option: 'Base Stats',
+    },
+
+    {
+      option: 'Moves',
+    },
+  ];
+
+  const setMenuOption = (goMenu) => setMenu(goMenu);
+
+  const btnActive = {
+    color: pokemonColor,
+  };
+
+  useEffect(() => {
+    dispatch(getDetail(id));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <View style={styles.pages}>
-      <Text>PokemonDetailScreen</Text>
+    <View style={bgStyles}>
+      <Text style={styles.text__titleDetail}>{pokemonDetail.name}</Text>
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      }}
+      >
+        <View style={{
+          flexDirection: 'row', flexWrap: 'wrap', marginLeft: 20, marginRight: 30,
+        }}
+        >
+          {pokemonDetail.types
+            ? pokemonDetail.types.map((type, idx) => (
+              <View
+                // eslint-disable-next-line react/no-array-index-key
+                key={idx}
+                style={{
+                  backgroundColor: colors.text.secondary, opacity: 0.2, borderRadius: 15, alignSelf: 'baseline', margin: 5,
+                }}
+              >
+                <Text style={{
+                  color: colors.text.primary, padding: 5, opacity: 1, fontWeight: 'bold', fontSize: 20, marginLeft: 10, marginRight: 10,
+                }}
+                >
+                  {type.type.name}
+                </Text>
+              </View>
+            ))
+            : <View />}
+
+        </View>
+        <View style={{ paddingRight: 20 }}>
+          <Text style={{
+            color: colors.text.secondary, opacity: 0.8, fontWeight: 'bold', fontSize: 40,
+          }}
+          >
+            #
+            {`${pokemonDetail.id}`.padStart(3, 0)}
+          </Text>
+        </View>
+      </View>
+      <View style={{
+        alignItems: 'center',
+        elevation: 5,
+      }}
+      >
+        <Image
+          style={styles.detail__imagePokemon}
+          source={{ uri: pokemonDetail.sprites.other['official-artwork'].front_default }}
+        />
+      </View>
+      <View style={styles.container__moves}>
+        <SafeAreaView style={styles.detail__containerInfo}>
+          <View style={styles.detail__listTab}>
+            {
+                    listMenuInfo.map((e) => (
+                      <TouchableOpacity
+                        key={e.option}
+                        style={[styles.detail__btnTab,
+                          menu === e.option && {
+                            borderBottomWidth: 1,
+                            borderBottomColor: pokemonColor,
+                          }]}
+                        onPress={() => setMenuOption(e.option)}
+                      >
+                        <Text style={[styles.detail__textTab, menu === e.option && btnActive]}>
+                          {e.option}
+                        </Text>
+                      </TouchableOpacity>
+                    ))
+                }
+          </View>
+          <View>
+            <View style={{ paddingBottom: 80 }}>
+              {menu === 'Moves'
+                ? <Moves item={pokemonDetail} /> : <View />}
+
+              {menu === 'About'
+                ? <About item={pokemonDetail} /> : <View />}
+
+              {menu === 'Base Stats'
+                ? <BaseStats item={pokemonDetail} /> : <View />}
+            </View>
+          </View>
+        </SafeAreaView>
+      </View>
     </View>
   );
 }
@@ -12,9 +138,67 @@ function PokemonDetailScreen() {
 export default PokemonDetailScreen;
 
 const styles = StyleSheet.create({
-  pages: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: colors.background.primary,
+    // padding: 10,
   },
+
+  container__moves: {
+    top: 160,
+    backgroundColor: colors.text.secondary,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    flex: 1,
+    paddingTop: 70,
+  },
+
+  text__titleDetail: {
+    fontSize: 30,
+    margin: 20,
+    marginBottom: 10,
+    fontFamily: fonts.primary[800],
+    color: colors.text.secondary,
+  },
+
+  detail__imagePokemon: {
+    height: 200,
+    width: 200,
+    position: 'absolute',
+    top: 20,
+    backgroundColor: 'yellow',
+  },
+
+  detail__containerInfo: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+
+  detail__listTab: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+
+  detail__btnTab: {
+    width: windowWidth / 3.5,
+    flexDirection: 'row',
+    borderBottomColor: colors.outlineInput,
+    borderBottomWidth: 0.5,
+    padding: 10,
+    justifyContent: 'center',
+  },
+
+  detail__textTab: {
+    fontSize: 18,
+    color: colors.outlineInput,
+    fontWeight: 'bold',
+  },
+
+  bgStyles: {
+    flex: 1,
+    borderRadius: 15,
+    padding: 10,
+  },
+
 });

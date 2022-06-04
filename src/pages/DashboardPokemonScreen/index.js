@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ButtonComponent, Header } from '../../component';
 import PokemonCard from '../../component/molekul/PokemonCard';
 import { getPokemon } from '../../redux';
+import { colors } from '../../utils';
 
 function DashboardPokemonScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ function DashboardPokemonScreen({ navigation }) {
         numColumns={2}
         showsVerticalScrollIndicator={false}
         keyExtractor={(pokemon) => String(pokemon.id)}
-        renderItem={({ item }) => <PokemonCard pokemon={item} onPress={() => navigation.navigate('PokemonDetailScreen', item)} />}
+        renderItem={({ item }) => <PokemonCard pokemon={item} onPress={() => navigation.navigate('PokemonDetailScreen', { id: item.id })} />}
       />
       <ButtonComponent icon="bag-personal" type="floating-btn" onPress={() => navigation.navigate('PokebagScreen')} />
     </View>
@@ -38,12 +39,12 @@ export default DashboardPokemonScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: colors.background.primary,
     // padding: 10,
   },
   content: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: colors.background.primary,
   },
 
 });

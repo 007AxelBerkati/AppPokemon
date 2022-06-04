@@ -34,7 +34,7 @@ export const getPokemon = (nextPage) => async (dispatch) => {
           name: pokemonDetails.name[0].toUpperCase() + pokemonDetails.name.substring(1),
           type: pokemonDetails.types[0].type.name,
           types: pokemonDetails.types,
-          imgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonDetails.id}.png`,
+          imgUrl: pokemonDetails.sprites.other['official-artwork'].front_default,
         });
       }
 
