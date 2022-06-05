@@ -9,6 +9,8 @@ export const forgetPassword = (email) => auth().sendPasswordResetEmail(email);
 
 export const signInSocialMedia = (credential) => auth().signInWithCredential(credential);
 
+export const signOut = () => auth().signOut();
+
 export const databaseRef = () => firebase
   .app()
   .database('https://mypokemon-af7f8-default-rtdb.asia-southeast1.firebasedatabase.app/');

@@ -3,15 +3,17 @@ import {
   FlatList, StyleSheet, View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { ButtonComponent, Header } from '../../component';
+import { ButtonComponent, Header, Loading } from '../../component';
 import PokemonCard from '../../component/molekul/PokemonCard';
+import { signOut } from '../../config';
 import { getPokemon } from '../../redux';
-import { colors } from '../../utils';
+import { colors, removeData, showError } from '../../utils';
 
 function DashboardPokemonScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const dataPokemon = useSelector((state) => state.dataPokemon);
+  const loading = useSelector((state) => state.dataPokemon.loading);
   // const [nextPage, setNextPage] = useState(0);
   // const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
@@ -19,9 +21,18 @@ function DashboardPokemonScreen({ navigation }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
+  const logOut = () => {
+    signOut().then(() => {
+      removeData('user').then(() => navigation.replace('LoginScreen'));
+    })
+      .catch((err) => {
+        showError(err.message);
+      });
+  };
+
+  return loading ? <Loading /> : (
     <View style={styles.container}>
-      <Header type="dashboard-profile" title="My Pokemon" />
+      <Header type="dashboard-profile" title="My Pokemon" onPress={logOut} />
       <FlatList
         data={dataPokemon.pokemon}
         numColumns={2}
