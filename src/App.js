@@ -12,7 +12,7 @@ function MainApp() {
   const stateGlobal = useSelector((state) => state.dataGlobal);
   return (
     <>
-      <StatusBar barStyle="light-content" backgroundColor={colors.background.secondary} />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background.secondary} />
       <Router />
       <FlashMessage position="top" />
       {stateGlobal.isLoading && <Loading />}

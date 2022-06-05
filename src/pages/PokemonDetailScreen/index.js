@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Animated,
   Easing,
-  Image, StyleSheet, Text, TouchableOpacity, View,
+  Image, StatusBar, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -73,6 +73,7 @@ function PokemonDetailScreen({ navigation, route }) {
 
   return loading ? <Loading /> : (
     <View style={bgStyles}>
+      <StatusBar backgroundColor={pokemonColor} />
       <View style={styles.iconButton}>
         <View style={{ flex: 1 }}>
           <IconButton icon="arrow-left" color={colors.primary} onPress={() => navigation.goBack()} />

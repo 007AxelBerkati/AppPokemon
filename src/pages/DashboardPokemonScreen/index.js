@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  FlatList, StyleSheet, View,
+  FlatList, StatusBar, StyleSheet, View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonComponent, Header, Loading } from '../../component';
@@ -32,6 +32,7 @@ function DashboardPokemonScreen({ navigation }) {
 
   return loading ? <Loading /> : (
     <View style={styles.container}>
+      <StatusBar backgroundColor={colors.background.primary} barStyle="dark-content" />
       <Header type="dashboard-profile" title="My Pokemon" onPress={logOut} />
       <FlatList
         data={dataPokemon.pokemon}
