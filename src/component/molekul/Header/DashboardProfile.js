@@ -22,7 +22,7 @@ export default DashboardProfile;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.background.secondary,
+    backgroundColor: colors.background.primary,
     paddingVertical: 15,
     paddingLeft: 20,
     paddingRight: 16,

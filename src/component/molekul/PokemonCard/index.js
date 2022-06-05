@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  Text, View, Image, TouchableWithoutFeedback, StyleSheet,
+  Image, StyleSheet, Text, TouchableWithoutFeedback, View,
 } from 'react-native';
+import { pokeBall } from '../../../assets';
 import { colors, fonts, pokemonColors } from '../../../utils';
 
 export default function PokemonCard({ pokemon, onPress }) {
@@ -19,6 +20,7 @@ export default function PokemonCard({ pokemon, onPress }) {
               #
               {`${pokemon.id}`.padStart(3, 0)}
             </Text>
+            <Image source={pokeBall} style={styles.imagePokeball} blurRadius={10} />
             <Image
               style={styles.card__imagePokemon}
               source={{ uri: pokemon.imgUrl }}
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     height: 140,
+    overflow: 'hidden',
   },
   card__typeText: {
     color: 'black',
@@ -90,5 +93,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     position: 'absolute',
     right: 10,
+  },
+
+  imagePokeball: {
+    position: 'absolute',
+    top: 0,
+    right: 6,
+    width: 40,
+    height: 40,
+    opacity: 0.2,
   },
 });
