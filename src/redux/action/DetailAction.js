@@ -23,7 +23,9 @@ export const getDetail = (id) => async (dispatch) => {
     async (res) => {
       if (res.data) {
         const data = {
-          ...res.data, type: res.data.types[0].type.name,
+          ...res.data,
+          type: res.data.types[0].type.name,
+          name: res.data.name[0].toUpperCase() + res.data.name.substring(1),
         };
         dispatch(getDetailSuccess(data));
       }

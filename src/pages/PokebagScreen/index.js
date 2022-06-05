@@ -1,20 +1,31 @@
-import {
-  Alert,
-  FlatList, StyleSheet, Text, View,
-} from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { colors } from '../../utils';
-import { databaseRef } from '../../config/Firebase';
+import {
+  FlatList, StyleSheet, View,
+} from 'react-native';
+import {
+  Button, Dialog, Paragraph, Portal,
+} from 'react-native-paper';
 import { Header, Loading, PokemonCard } from '../../component';
+import { databaseRef } from '../../config/Firebase';
+import { colors } from '../../utils';
 
-function PokebagScreen() {
+function PokebagScreen({ navigation }) {
   const [pokebag, setPokebag] = useState([]);
   const [key, setKey] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [id, setId] = useState('');
 
-  const fetchPokeBagData = () => {
+  const showDialog = (item) => {
+    setId(item);
+    setVisible(true);
+  };
+
+  const hideDialog = () => setVisible(false);
+
+  const fetchPokeBagData = async () => {
     setLoading(true);
-    const reference = databaseRef().ref('/pokeBag');
+    const reference = await databaseRef().ref('/pokeBag');
     reference.on('value', (snapshot) => {
       GetData(snapshot.val());
       setLoading(false);
@@ -33,6 +44,23 @@ function PokebagScreen() {
     setPokebag(data);
   };
 
+  const removePokemon = async () => {
+    try {
+      await databaseRef().ref(`/pokeBag/${id}`).remove();
+      fetchPokeBagData();
+      hideDialog();
+    } catch (error) {
+      // Alert.alert('Oops', error);
+    }
+  };
+
+  const detailPokemon = () => {
+    navigation.navigate('PokemonDetailScreen', {
+      id: pokebag[id].id,
+    });
+    hideDialog();
+  };
+
   return loading ? <Loading /> : (
     <View style={styles.pages}>
       <Header type="dashboard-profile" title="My Pokemon" />
@@ -40,10 +68,44 @@ function PokebagScreen() {
         data={key}
         numColumns={2}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <PokemonCard pokemon={pokebag[item]} onPress={() => Alert.alert('Tesss')} />}
+        renderItem={({ item }) => (
+          <PokemonCard
+            pokemon={pokebag[item]}
+            onPress={() => showDialog(item)}
+          />
+        )}
       />
-      <Text>PokebagScreen</Text>
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>Alert</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>
+              Want to Remove
+              {' '}
+              {pokebag[id]?.name}
+              {' '}
+              or see more detail?
+            </Paragraph>
+          </Dialog.Content>
+          <Dialog.Content style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <Dialog.Actions>
+              <Button onPress={removePokemon}>Remove</Button>
+            </Dialog.Actions>
+            <Dialog.Actions>
+              <Button onPress={detailPokemon}>Detail</Button>
+            </Dialog.Actions>
+            {/* <IconButton
+              icon="cancel"
+              style={{ position: 'absolute', top: -120 }}
+              color={colors.warning}
+              onPress={hideDialog}
+            /> */}
+          </Dialog.Content>
+
+        </Dialog>
+      </Portal>
     </View>
+
   );
 }
 
