@@ -21,9 +21,9 @@ export const getDetail = (id) => async (dispatch) => {
   dispatch(getDetailLoading(true));
   await axios.get(`${GET_POKEMON_API}/${id}`).then(
     async (res) => {
-      const data = await res.data;
-      dispatch(getDetailSuccess(data));
-      dispatch(getDetailLoading(false));
+      if (res.data) {
+        dispatch(getDetailSuccess(res.data));
+      }
     },
   ).catch(
     (error) => {

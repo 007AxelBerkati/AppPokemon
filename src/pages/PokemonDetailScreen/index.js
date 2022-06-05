@@ -6,7 +6,7 @@ import { IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  About, BaseStats, Moves,
+  About, BaseStats, Loading, Moves,
 } from '../../component';
 import { getDetail } from '../../redux/action/DetailAction';
 import {
@@ -16,10 +16,16 @@ import {
 function PokemonDetailScreen({ navigation, route }) {
   const dispatch = useDispatch();
   const { id } = route.params;
-  const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemon);
+  const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemonDetail);
+  const loading = useSelector((state) => state.dataPokemonDetail.loading);
   const [menu, setMenu] = useState('About');
 
-  const pokemonColor = pokemonColors[pokemonDetail.types['0'].type.name];
+  useEffect(() => {
+    dispatch(getDetail(id));
+    // console.log('pokemonDetail : ', pokemonDetail);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+  const pokemonColor = pokemonColors[pokemonDetail?.types['0']?.type?.name];
   const bgStyles = { ...styles.container, backgroundColor: pokemonColor };
 
   const listMenuInfo = [
@@ -42,12 +48,7 @@ function PokemonDetailScreen({ navigation, route }) {
     color: pokemonColor,
   };
 
-  useEffect(() => {
-    dispatch(getDetail(id));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
+  return loading ? <Loading /> : (
     <View style={bgStyles}>
       <View style={styles.iconButton}>
         <View style={{ flex: 1 }}>
@@ -70,7 +71,7 @@ function PokemonDetailScreen({ navigation, route }) {
         </View>
       </View>
 
-      <Text style={styles.text__titleDetail}>{pokemonDetail.name}</Text>
+      <Text style={styles.text__titleDetail}>{pokemonDetail?.name}</Text>
       <View style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -80,7 +81,7 @@ function PokemonDetailScreen({ navigation, route }) {
           flexDirection: 'row', flexWrap: 'wrap', marginLeft: 20, marginRight: 30,
         }}
         >
-          {pokemonDetail.types
+          {pokemonDetail?.types
             ? pokemonDetail.types.map((type, idx) => (
               <View
                 // eslint-disable-next-line react/no-array-index-key
@@ -106,7 +107,7 @@ function PokemonDetailScreen({ navigation, route }) {
           }}
           >
             #
-            {`${pokemonDetail.id}`.padStart(3, 0)}
+            {`${pokemonDetail?.id}`.padStart(3, 0)}
           </Text>
         </View>
       </View>
@@ -118,7 +119,7 @@ function PokemonDetailScreen({ navigation, route }) {
       >
         <Image
           style={styles.detail__imagePokemon}
-          source={{ uri: pokemonDetail.sprites.other['official-artwork'].front_default }}
+          source={{ uri: pokemonDetail?.sprites.other['official-artwork'].front_default }}
         />
       </View>
       <View style={styles.container__moves}>
@@ -232,3 +233,34 @@ const styles = StyleSheet.create({
   },
 
 });
+
+// import { StyleSheet, Text, View } from 'react-native';
+// import React, { useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { getDetail } from '../../redux/action/DetailAction';
+// import { pokemonColors } from '../../utils';
+
+// function PokemonDetailScreen({ route }) {
+//   const dispatch = useDispatch();
+//   const { id } = route.params;
+//   const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemon);
+//   const loading = useSelector((state) => state.dataPokemonDetail.loading);
+
+//   const pokemonColor = pokemonColors[pokemonDetail.types['0'].type.name];
+
+//   useEffect(() => {
+//     dispatch(getDetail(id));
+//     console.log('pokemonDetail : ', pokemonDetail);
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, []);
+
+//   return (
+//     <View>
+//       <Text>PokemonDetailScreen</Text>
+//     </View>
+//   );
+// }
+
+// export default PokemonDetailScreen;
+
+// const styles = StyleSheet.create({});

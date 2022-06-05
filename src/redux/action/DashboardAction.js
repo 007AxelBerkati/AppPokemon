@@ -39,7 +39,6 @@ export const getPokemon = (nextPage) => async (dispatch) => {
       }
 
       dispatch(getPokemonSuccess(pokemonArray));
-      dispatch(getPokemonLoading(false));
     },
   ).catch(
     (error) => {

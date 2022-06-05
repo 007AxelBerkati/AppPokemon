@@ -10,8 +10,8 @@ export default function About(props) {
     function getAbility() {
       const arr = [];
       // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < item.abilities.length; i++) {
-        arr.push(item.abilities[i].ability.name);
+      for (let i = 0; i < item?.abilities.length; i++) {
+        arr.push(item?.abilities[i].ability.name);
       }
       return setAbilities(arr);
     }
@@ -24,13 +24,13 @@ export default function About(props) {
     <View>
       <View style={{ flexDirection: 'row', marginBottom: 20 }}>
         <Text style={styles.about__title}>Species</Text>
-        <Text style={styles.about__text}>{item.species.name}</Text>
+        <Text style={styles.about__text}>{item?.species.name}</Text>
       </View>
 
       <View style={{ flexDirection: 'row', marginBottom: 20 }}>
         <Text style={styles.about__title}>Height</Text>
         <Text style={styles.about__text}>
-          {item.height}
+          {item?.height}
 
         </Text>
       </View>
@@ -38,14 +38,14 @@ export default function About(props) {
       <View style={{ flexDirection: 'row', marginBottom: 20 }}>
         <Text style={styles.about__title}>Weight</Text>
         <Text style={styles.about__text}>
-          {item.weight}
+          {item?.weight}
           lbs
         </Text>
       </View>
 
       <View style={{ flexDirection: 'row', marginBottom: 20 }}>
         <Text style={styles.about__title}>Abilities</Text>
-        <Text style={styles.about__text}>{abilities.join(', ')}</Text>
+        <Text style={styles.about__text}>{abilities?.join(', ')}</Text>
       </View>
     </View>
   );

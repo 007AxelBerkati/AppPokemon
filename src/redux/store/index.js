@@ -8,7 +8,7 @@ import { pokemonDetailReducer } from '../reducer/DetailReducer';
 
 const persistConfig = {
   key: 'root',
-  // blacklist: ['dataPokemon'],
+  blacklist: ['dataPokemon, dataGlobal, dataPokemonDetail'],
   storage: AsyncStorage,
 };
 

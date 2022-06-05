@@ -1,7 +1,7 @@
 import { GET_POKEMON_DETAIL_FAILURE, GET_POKEMON_DETAIL_LOADING, GET_POKEMON_DETAIL_SUCCESS } from '../types';
 
 const initialPokemonDetailState = {
-  pokemon: {},
+  pokemonDetail: {},
   loading: false,
   error: null,
 };
@@ -16,7 +16,7 @@ export const pokemonDetailReducer = (state = initialPokemonDetailState, action =
     case GET_POKEMON_DETAIL_SUCCESS:
       return {
         ...state,
-        pokemon: action.data,
+        pokemonDetail: action.data,
         loading: false,
       };
     case GET_POKEMON_DETAIL_FAILURE:
