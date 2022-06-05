@@ -19,13 +19,15 @@ function PokemonDetailScreen({ navigation, route }) {
   const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemonDetail);
   const loading = useSelector((state) => state.dataPokemonDetail.loading);
   const [menu, setMenu] = useState('About');
+  const pokemonColor = pokemonColors[pokemonDetail.type];
 
   useEffect(() => {
     dispatch(getDetail(id));
+
     // console.log('pokemonDetail : ', pokemonDetail);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-  const pokemonColor = pokemonColors[pokemonDetail?.types['0']?.type?.name];
+
   const bgStyles = { ...styles.container, backgroundColor: pokemonColor };
 
   const listMenuInfo = [
@@ -82,7 +84,7 @@ function PokemonDetailScreen({ navigation, route }) {
         }}
         >
           {pokemonDetail?.types
-            ? pokemonDetail.types.map((type, idx) => (
+            ? pokemonDetail?.types.map((type, idx) => (
               <View
                 // eslint-disable-next-line react/no-array-index-key
                 key={idx}
@@ -119,7 +121,7 @@ function PokemonDetailScreen({ navigation, route }) {
       >
         <Image
           style={styles.detail__imagePokemon}
-          source={{ uri: pokemonDetail?.sprites.other['official-artwork'].front_default }}
+          source={{ uri: pokemonDetail?.sprites?.other['official-artwork'].front_default }}
         />
       </View>
       <View style={styles.container__moves}>

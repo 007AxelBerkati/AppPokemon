@@ -10,7 +10,7 @@ export default function About(props) {
     function getAbility() {
       const arr = [];
       // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < item?.abilities.length; i++) {
+      for (let i = 0; i < item?.abilities?.length; i++) {
         arr.push(item?.abilities[i].ability.name);
       }
       return setAbilities(arr);
@@ -24,7 +24,7 @@ export default function About(props) {
     <View>
       <View style={{ flexDirection: 'row', marginBottom: 20 }}>
         <Text style={styles.about__title}>Species</Text>
-        <Text style={styles.about__text}>{item?.species.name}</Text>
+        <Text style={styles.about__text}>{item?.species?.name}</Text>
       </View>
 
       <View style={{ flexDirection: 'row', marginBottom: 20 }}>
