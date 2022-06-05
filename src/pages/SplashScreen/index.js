@@ -1,4 +1,4 @@
-// import auth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import LottieView from 'lottie-react-native';
 import React, { useEffect } from 'react';
 import {
@@ -12,23 +12,21 @@ import {
 function SplashScreen({ navigation }) {
   useEffect(() => {
     onLogScreenView('SplashScreen');
-    setTimeout(() => {
-      navigation.replace('LoginScreen');
-    }, 3000);
 
-    // const subscriber = auth().onAuthStateChanged((user) => {
-    //   if (user) {
-    //     setTimeout(() => {
-    //       navigation.replace('DashboardScreen');
-    //     }, 3000);
-    //   } else {
-    //     setTimeout(() => {
-    //       navigation.replace('LoginScreen');
-    //     }, 3000);
-    //   }
-    // });
+    const subscriber = auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log('user : ', user);
+        setTimeout(() => {
+          navigation.replace('DashboardPokemonScreen');
+        }, 3000);
+      } else {
+        setTimeout(() => {
+          navigation.replace('LoginScreen');
+        }, 3000);
+      }
+    });
 
-    // return subscriber();
+    return subscriber;
   }, [navigation]);
   return (
     <View style={styles.page}>
