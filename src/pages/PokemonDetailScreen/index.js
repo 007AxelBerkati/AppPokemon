@@ -1,9 +1,9 @@
+/* eslint-disable no-plusplus */
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Animated,
-  Easing,
-  Image, StatusBar, StyleSheet, Text, TouchableOpacity, View,
+  Easing, StatusBar, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,6 +26,8 @@ function PokemonDetailScreen({ navigation, route }) {
   const [menu, setMenu] = useState('About');
   const pokemonColor = pokemonColors[pokemonDetail.type];
   const spinValue = useState(new Animated.Value(0))[0];
+  const failValue = useState(new Animated.Value(0))[0];
+  const [disableCatch, setDisableCatch] = useState(false);
 
   const bgStyles = { ...styles.container, backgroundColor: pokemonColor };
 
@@ -37,6 +39,59 @@ function PokemonDetailScreen({ navigation, route }) {
 
   const btnActive = {
     color: pokemonColor,
+  };
+
+  const savePokemon = async () => {
+    const reference = databaseRef().ref('/pokeBag');
+    const ratio = Math.floor(Math.random() * 11);
+    await animate();
+    try {
+      if (ratio > 5) {
+        reference.push({
+          id: pokemonDetail.id,
+          name: pokemonDetail.name,
+          type: pokemonDetail.type,
+          imgUrl: pokemonDetail?.sprites?.other['official-artwork'].front_default,
+          types: pokemonDetail.types,
+        });
+        setDisableCatch(true);
+        Alert.alert('Success', 'Berhasil Menangkap');
+      } else {
+        Alert.alert('Oops', 'Gagal Menangkap');
+      }
+    } catch (error) {
+      Alert.alert('Oops', 'Gagal Menyimpan Ke PokeBag');
+    }
+  };
+
+  const checkPokemon = (item) => {
+    let keyFirebase = [];
+    keyFirebase = Object.keys(item);
+    for (let i = 0; i < keyFirebase.length; i++) {
+      if (item[keyFirebase[i]].name.includes(pokemonDetail?.name)) {
+        setDisableCatch(true);
+      }
+    }
+  };
+
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  const rotate = failValue.interpolate({
+    inputRange: [0, 1, 2, 3, 4, 5, 6, 10],
+    outputRange: ['0deg', '14deg', '-8deg', '14deg', '-4deg', '10deg', '0deg', '0deg'],
+  });
+
+  const animate = async () => {
+    failValue.setValue(0);
+    Animated.timing(failValue, {
+      toValue: 10,
+      useNativeDriver: true,
+      easing: Easing.linear,
+      duration: 2500,
+    }).start();
   };
 
   Animated.loop(
@@ -51,34 +106,13 @@ function PokemonDetailScreen({ navigation, route }) {
     ),
   ).start();
 
-  const spin = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
-
-  const savePokemon = () => {
-    const reference = databaseRef().ref('/pokeBag');
-    const ratio = Math.floor(Math.random() * 11);
-    try {
-      if (ratio > 5) {
-        reference.push({
-          id: pokemonDetail.id,
-          name: pokemonDetail.name,
-          type: pokemonDetail.type,
-          imgUrl: pokemonDetail?.sprites?.other['official-artwork'].front_default,
-          types: pokemonDetail.types,
-        });
-        Alert.alert('Success', 'Berhasil Menangkap');
-      } else {
-        Alert.alert('Oops', 'Gagal Menangkap');
-      }
-    } catch (error) {
-      Alert.alert('Oops', 'Gagal Menyimpan Ke PokeBag');
-    }
-  };
-
   useEffect(() => {
     dispatch(getDetail(id));
+    const reference = databaseRef().ref('/pokeBag');
+    reference.on('value', (snapshot) => {
+      checkPokemon(snapshot.val());
+    });
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
@@ -89,21 +123,24 @@ function PokemonDetailScreen({ navigation, route }) {
         <View style={{ flex: 1 }}>
           <IconButton icon="arrow-left" color={colors.primary} onPress={() => navigation.goBack()} />
         </View>
-        <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
-          <View style={{ flexDirection: 'column' }}>
-            <IconButton icon="bag-checked" color={colors.primary} onPress={() => savePokemon()} />
-            <Text style={{
-              fontFamily: fonts.primary[600],
-              color: colors.text.secondary,
-              textAlign: 'center',
-              marginTop: -10,
-              fontSize: 12,
-            }}
-            >
-              Catch
-            </Text>
+        {disableCatch ? null : (
+          <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
+            <View style={{ flexDirection: 'column' }}>
+              <IconButton icon="bag-checked" color={colors.primary} onPress={() => savePokemon()} />
+              <Text style={{
+                fontFamily: fonts.primary[600],
+                color: colors.text.secondary,
+                textAlign: 'center',
+                marginTop: -10,
+                fontSize: 12,
+              }}
+              >
+                Catch
+              </Text>
+            </View>
           </View>
-        </View>
+        )}
+
       </View>
 
       <Text style={styles.text__titleDetail}>{pokemonDetail?.name}</Text>
@@ -163,8 +200,8 @@ function PokemonDetailScreen({ navigation, route }) {
             transform: [{ rotate: spin }],
           }}
         />
-        <Image
-          style={styles.detail__imagePokemon}
+        <Animated.Image
+          style={[styles.detail__imagePokemon, { transform: [{ rotate }] }]}
           source={{ uri: pokemonDetail?.sprites?.other['official-artwork'].front_default }}
         />
       </View>

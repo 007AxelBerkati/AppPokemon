@@ -1,39 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import {
-  FlatList, StyleSheet, View,
+  FlatList, Modal, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
-import {
-  Button, Dialog, Paragraph, Portal,
-} from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import { Header, Loading, PokemonCard } from '../../component';
 import { databaseRef } from '../../config/Firebase';
-import { colors } from '../../utils';
+import { colors, fonts, showError } from '../../utils';
 
 function PokebagScreen({ navigation }) {
   const [pokebag, setPokebag] = useState([]);
   const [key, setKey] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
   const [id, setId] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const showDialog = (item) => {
-    setId(item);
-    setVisible(true);
-  };
-
-  const hideDialog = () => setVisible(false);
+  // const showDialog = (item) => {
+  //   setId(item);
+  //   setVisible(true);
+  // };
 
   const fetchPokeBagData = async () => {
     setLoading(true);
-    const reference = await databaseRef().ref('/pokeBag');
+    const reference = databaseRef().ref('/pokeBag');
     reference.on('value', (snapshot) => {
-      GetData(snapshot.val());
+      if (snapshot.val()) {
+        GetData(snapshot.val());
+        setLoading(false);
+      }
       setLoading(false);
     });
   };
 
   useEffect(() => {
     fetchPokeBagData();
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -48,9 +49,9 @@ function PokebagScreen({ navigation }) {
     try {
       await databaseRef().ref(`/pokeBag/${id}`).remove();
       fetchPokeBagData();
-      hideDialog();
+      setModalVisible(false);
     } catch (error) {
-      // Alert.alert('Oops', error);
+      showError(error);
     }
   };
 
@@ -58,52 +59,78 @@ function PokebagScreen({ navigation }) {
     navigation.navigate('PokemonDetailScreen', {
       id: pokebag[id].id,
     });
-    hideDialog();
+    setModalVisible(false);
+  };
+
+  const openModal = (item) => {
+    setId(item);
+    setModalVisible(true);
   };
 
   return loading ? <Loading /> : (
     <View style={styles.pages}>
       <Header type="dashboard-profile" title="My Pokemon" />
-      <FlatList
-        data={key}
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <PokemonCard
-            pokemon={pokebag[item]}
-            onPress={() => showDialog(item)}
+      {
+        pokebag.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>
+              You don&apos;t have any pokemon yet.
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={key}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <PokemonCard
+                pokemon={pokebag[item]}
+                onPress={() => openModal(item)}
+              />
+            )}
           />
-        )}
-      />
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Alert</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>
-              Want to Remove
+        )
+      }
+
+      <Modal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        animationType="slide"
+        transparent
+      >
+        <View style={styles.containerModal}>
+          <View style={styles.containerTop}>
+            <IconButton
+              icon="cancel"
+              style={{ position: 'absolute', right: 0 }}
+              color={colors.warning}
+              onPress={() => setModalVisible(false)}
+            />
+            <Text style={{
+              fontSize: 16,
+              textAlign: 'center',
+              paddingTop: 50,
+              fontFamily: fonts.primary[800],
+              color: colors.text.subtitle,
+            }}
+            >
+              Go to detail or remove pokemon
               {' '}
               {pokebag[id]?.name}
-              {' '}
-              or see more detail?
-            </Paragraph>
-          </Dialog.Content>
-          <Dialog.Content style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <Dialog.Actions>
-              <Button onPress={removePokemon}>Remove</Button>
-            </Dialog.Actions>
-            <Dialog.Actions>
-              <Button onPress={detailPokemon}>Detail</Button>
-            </Dialog.Actions>
-            {/* <IconButton
-              icon="cancel"
-              style={{ position: 'absolute', top: -120 }}
-              color={colors.warning}
-              onPress={hideDialog}
-            /> */}
-          </Dialog.Content>
+              ?
+            </Text>
+            <View style={{ flexDirection: 'row', margin: 10 }}>
+              <TouchableOpacity onPress={() => detailPokemon()} style={styles.cancelButton}>
+                <Text style={{ fontSize: 14, color: colors.text.secondary }}>Detail</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => removePokemon()} style={styles.deleteButton}>
+                <Text style={{ fontSize: 14, color: colors.text.secondary }}>Remove</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
-        </Dialog>
-      </Portal>
     </View>
 
   );
@@ -116,4 +143,52 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background.primary,
   },
+
+  containerModal: {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  containerTop: {
+    backgroundColor: 'white',
+    paddingTop: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    paddingBottom: 20,
+    alignItems: 'center',
+    height: 200,
+  },
+  cancelButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 6,
+    marginRight: 5,
+    width: '40%',
+    borderColor: colors.background.secondary,
+    backgroundColor: colors.background.secondary,
+    height: 40,
+  },
+  deleteButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 6,
+    marginLeft: 5,
+    width: '40%',
+    borderColor: colors.warning,
+    backgroundColor: colors.warning,
+    height: 40,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    textAlign: 'center',
+    paddingTop: 50,
+    fontFamily: fonts.primary[800],
+    color: colors.text.subtitle,
+  },
+
 });
