@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   Animated,
   Easing,
   Image, StatusBar, StyleSheet, Text, TouchableOpacity, View,
@@ -11,6 +12,7 @@ import { pokeBall } from '../../assets';
 import {
   About, BaseStats, Loading, Moves,
 } from '../../component';
+import { databaseRef } from '../../config';
 import { getDetail } from '../../redux/action/DetailAction';
 import {
   colors, fonts, pokemonColors, windowWidth,
@@ -25,7 +27,18 @@ function PokemonDetailScreen({ navigation, route }) {
   const pokemonColor = pokemonColors[pokemonDetail.type];
   const spinValue = useState(new Animated.Value(0))[0];
 
-  // First set up animation
+  const bgStyles = { ...styles.container, backgroundColor: pokemonColor };
+
+  const listMenuInfo = [
+    { option: 'About' }, { option: 'Base Stats' }, { option: 'Moves' },
+  ];
+
+  const setMenuOption = (goMenu) => setMenu(goMenu);
+
+  const btnActive = {
+    color: pokemonColor,
+  };
+
   Animated.loop(
     Animated.timing(
       spinValue,
@@ -38,38 +51,36 @@ function PokemonDetailScreen({ navigation, route }) {
     ),
   ).start();
 
-  // Next, interpolate beginning and end values (in this case 0 and 1)
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
   });
 
+  const savePokemon = () => {
+    const reference = databaseRef().ref('/pokeBag');
+    const ratio = Math.floor(Math.random() * 11);
+    try {
+      if (ratio > 5) {
+        reference.push({
+          id: pokemonDetail.id,
+          name: pokemonDetail.name,
+          type: pokemonDetail.type,
+          imgUrl: pokemonDetail?.sprites?.other['official-artwork'].front_default,
+          types: pokemonDetail.types,
+        });
+        Alert.alert('Success', 'Berhasil Menangkap');
+      } else {
+        Alert.alert('Oops', 'Gagal Menangkap');
+      }
+    } catch (error) {
+      Alert.alert('Oops', 'Gagal Menyimpan Ke PokeBag');
+    }
+  };
+
   useEffect(() => {
     dispatch(getDetail(id));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-
-  const bgStyles = { ...styles.container, backgroundColor: pokemonColor };
-
-  const listMenuInfo = [
-    {
-      option: 'About',
-    },
-
-    {
-      option: 'Base Stats',
-    },
-
-    {
-      option: 'Moves',
-    },
-  ];
-
-  const setMenuOption = (goMenu) => setMenu(goMenu);
-
-  const btnActive = {
-    color: pokemonColor,
-  };
 
   return loading ? <Loading /> : (
     <View style={bgStyles}>
@@ -80,7 +91,7 @@ function PokemonDetailScreen({ navigation, route }) {
         </View>
         <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
           <View style={{ flexDirection: 'column' }}>
-            <IconButton icon="bag-checked" color={colors.primary} />
+            <IconButton icon="bag-checked" color={colors.primary} onPress={() => savePokemon()} />
             <Text style={{
               fontFamily: fonts.primary[600],
               color: colors.text.secondary,
@@ -266,6 +277,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     marginHorizontal: 13,
     marginVertical: 13,
+    zIndex: 3,
   },
 
 });
