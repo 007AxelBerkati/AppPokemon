@@ -26,7 +26,7 @@ function PokemonDetailScreen({ navigation, route }) {
   const [menu, setMenu] = useState('About');
   const pokemonColor = pokemonColors[pokemonDetail.type];
   const spinValue = useState(new Animated.Value(0))[0];
-  const failValue = useState(new Animated.Value(0))[0];
+  const animateCatchValue = useState(new Animated.Value(0))[0];
   const [disableCatch, setDisableCatch] = useState(false);
 
   const bgStyles = { ...styles.container, backgroundColor: pokemonColor };
@@ -79,14 +79,14 @@ function PokemonDetailScreen({ navigation, route }) {
     outputRange: ['0deg', '360deg'],
   });
 
-  const rotate = failValue.interpolate({
+  const rotate = animateCatchValue.interpolate({
     inputRange: [0, 1, 2, 3, 4, 5, 6, 10],
     outputRange: ['0deg', '14deg', '-8deg', '14deg', '-4deg', '10deg', '0deg', '0deg'],
   });
 
   const animate = async () => {
-    failValue.setValue(0);
-    Animated.timing(failValue, {
+    animateCatchValue.setValue(0);
+    Animated.timing(animateCatchValue, {
       toValue: 10,
       useNativeDriver: true,
       easing: Easing.linear,
