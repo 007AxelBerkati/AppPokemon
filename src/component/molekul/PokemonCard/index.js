@@ -9,6 +9,8 @@ export default function PokemonCard({ pokemon, onPress }) {
   const pokemonColor = pokemonColors[pokemon.type];
   const bgStyles = { backgroundColor: pokemonColor, ...styles.bgStyles };
 
+  console.log('Pokemon Card');
+
   return (
     <TouchableWithoutFeedback
       onPress={onPress}

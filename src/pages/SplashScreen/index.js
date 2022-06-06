@@ -26,7 +26,7 @@ function SplashScreen({ navigation }) {
       }
     });
 
-    return subscriber;
+    return subscriber();
   }, [navigation]);
   return (
     <View style={styles.page}>

@@ -12,14 +12,8 @@ function PokebagScreen({ navigation, route }) {
   const [pokebag, setPokebag] = useState([]);
   const [key, setKey] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [visible, setVisible] = useState(false);
   const [id, setId] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-
-  // const showDialog = (item) => {
-  //   setId(item);
-  //   setVisible(true);
-  // };
 
   const fetchPokeBagData = async () => {
     setLoading(true);
@@ -59,6 +53,7 @@ function PokebagScreen({ navigation, route }) {
   const detailPokemon = () => {
     navigation.navigate('PokemonDetailScreen', {
       id: pokebag[id].id,
+      uid,
     });
     setModalVisible(false);
   };

@@ -9,7 +9,7 @@ import IconButton from './IconButton';
 import IconOnly from './IconOnly';
 
 export default function ButtonComponent({
-  type, title, onPress, icon, disable, nonButton, iconHeight, iconWidth, label,
+  type, title, onPress, icon, disable, nonButton, iconHeight, iconWidth, label, style,
 }) {
   if (type === 'icon-only') {
     return <IconOnly icon={icon} onPress={onPress} />;
@@ -32,13 +32,15 @@ export default function ButtonComponent({
 
   if (disable) {
     return (
-      <View style={styles.disableBG}>
+      <View style={{ ...styles.disableBG, ...style }}>
         <Text style={styles.disableText}>{title}</Text>
       </View>
     );
   }
+
+  console.log('TestButton');
   return (
-    <TouchableOpacity style={styles.container(type)} onPress={onPress}>
+    <TouchableOpacity style={{ ...styles.container(type), ...style }} onPress={onPress}>
       <Text style={styles.text(type)}>{title}</Text>
     </TouchableOpacity>
   );

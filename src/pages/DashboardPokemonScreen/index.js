@@ -4,7 +4,9 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ILNullPhoto } from '../../assets';
-import { ButtonComponent, Header, Loading } from '../../component';
+import {
+  ButtonComponent, Footer, Header, Loading,
+} from '../../component';
 import PokemonCard from '../../component/molekul/PokemonCard';
 import { signOut } from '../../config';
 import { getPokemon } from '../../redux';
@@ -24,14 +26,18 @@ function DashboardPokemonScreen({ navigation }) {
     bio: '',
     uid: '',
   });
-  // const [nextPage, setNextPage] = useState(0);
-  // const [currentPage, setCurrentPage] = useState(1);
-  useEffect(() => {
-    onLogScreenView('DashboardScreen');
-    getUserData();
-    dispatch(getPokemon(0));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [nextPage, setNextPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const onHandleNext = () => {
+    setNextPage(nextPage + 20);
+    setCurrentPage(currentPage + 1);
+  };
+
+  const onHandlePrevious = () => {
+    setNextPage(nextPage - 20);
+    setCurrentPage(currentPage - 1);
+  };
 
   const getUserData = () => {
     getData('user').then((res) => {
@@ -50,6 +56,17 @@ function DashboardPokemonScreen({ navigation }) {
       });
   };
 
+  const goToPokebag = () => {
+    navigation.navigate('PokebagScreen', { uid: profile.uid });
+  };
+
+  useEffect(() => {
+    onLogScreenView('DashboardScreen');
+    getUserData();
+    dispatch(getPokemon(nextPage));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextPage]);
+
   return loading ? <Loading /> : (
     <View style={styles.container}>
       <StatusBar backgroundColor={colors.background.primary} barStyle="dark-content" />
@@ -60,8 +77,18 @@ function DashboardPokemonScreen({ navigation }) {
         showsVerticalScrollIndicator={false}
         keyExtractor={(pokemon) => String(pokemon.id)}
         renderItem={({ item }) => <PokemonCard pokemon={item} onPress={() => navigation.navigate('PokemonDetailScreen', { id: item.id, uid: profile.uid })} />}
+        // eslint-disable-next-line react/no-unstable-nested-components
+        ListFooterComponent={({ item }) => (
+          <Footer
+            dataPokemon={item}
+            onHandleNext={onHandleNext}
+            onHandlePrevious={onHandlePrevious}
+            currentPage={currentPage}
+          />
+        )}
+
       />
-      <ButtonComponent icon="bag-personal" type="floating-btn" onPress={() => navigation.navigate('PokebagScreen', { uid: profile.uid })} />
+      <ButtonComponent icon="bag-personal" type="floating-btn" onPress={goToPokebag} />
     </View>
   );
 }

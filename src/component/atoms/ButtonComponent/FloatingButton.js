@@ -4,6 +4,7 @@ import { FAB } from 'react-native-paper';
 import { colors } from '../../../utils';
 
 function FloatingButton({ onPress, icon }) {
+  console.log('floating button');
   return (
     <FAB
       style={styles.fab}
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     margin: 20,
     right: 0,
-    bottom: 0,
+    bottom: 50,
     backgroundColor: colors.background.secondary,
   },
 });

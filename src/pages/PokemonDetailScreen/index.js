@@ -13,7 +13,7 @@ import {
   About, BaseStats, Loading, Moves,
 } from '../../component';
 import { databaseRef } from '../../config';
-import { getDetail, getDetailLoading } from '../../redux/action/DetailAction';
+import { getDetail } from '../../redux/action/DetailAction';
 import {
   colors, fonts, pokemonColors, windowWidth,
 } from '../../utils';
@@ -22,13 +22,17 @@ function PokemonDetailScreen({ navigation, route }) {
   const dispatch = useDispatch();
   const { id } = route.params;
   const { uid } = route.params;
+
   const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemonDetail);
   const loading = useSelector((state) => state.dataPokemonDetail.loading);
+
+  const [disableCatch, setDisableCatch] = useState(false);
   const [menu, setMenu] = useState('About');
-  const pokemonColor = pokemonColors[pokemonDetail.type];
+
   const spinValue = useState(new Animated.Value(0))[0];
   const animateCatchValue = useState(new Animated.Value(0))[0];
-  const [disableCatch, setDisableCatch] = useState(false);
+
+  const pokemonColor = pokemonColors[pokemonDetail.type];
 
   const bgStyles = { ...styles.container, backgroundColor: pokemonColor };
 
@@ -45,7 +49,6 @@ function PokemonDetailScreen({ navigation, route }) {
   const savePokemon = async () => {
     const reference = databaseRef().ref(`/pokeBag/${uid}`);
     const ratio = Math.floor(Math.random() * 11);
-    await animate();
     try {
       if (ratio > 5) {
         reference.push({
@@ -56,8 +59,10 @@ function PokemonDetailScreen({ navigation, route }) {
           types: pokemonDetail.types,
         });
         setDisableCatch(true);
+        await animate();
         Alert.alert('Success', 'Berhasil Menangkap');
       } else {
+        await animate();
         Alert.alert('Oops', 'Gagal Menangkap');
       }
     } catch (error) {
@@ -109,17 +114,13 @@ function PokemonDetailScreen({ navigation, route }) {
 
   useEffect(() => {
     dispatch(getDetail(id));
-    dispatch(getDetailLoading(true));
-    const reference = databaseRef().ref(`/pokeBag/${uid}`);
-    reference.on('value', (snapshot) => {
+    databaseRef().ref(`/pokeBag/${uid}`).on('value', (snapshot) => {
       if (snapshot.val()) {
         checkPokemon(snapshot.val());
-        dispatch(getDetailLoading(false));
       }
-      dispatch(getDetailLoading(false));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, disableCatch]);
+  }, []);
 
   return loading ? <Loading /> : (
     <View style={bgStyles}>
@@ -202,6 +203,8 @@ function PokemonDetailScreen({ navigation, route }) {
             opacity: 0.2,
             right: -50,
             top: -160,
+            width: 200,
+            height: 200,
             transform: [{ rotate: spin }],
           }}
         />
