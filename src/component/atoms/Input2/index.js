@@ -18,7 +18,7 @@ function Input2({
         activeOutlineColor={colors.lineTextInput}
         outlineColor={cannotEdited ? colors.disable.background : colors.outlineInput}
         style={styles.input}
-        secureTextEntry={secureTextEntry}
+        secureTextEntry={secureTextEntry ? passwordVisible : false}
         left={(
           <TextInput.Icon name={leftIcon} />
             )}

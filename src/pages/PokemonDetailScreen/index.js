@@ -13,7 +13,7 @@ import {
   About, BaseStats, Loading, Moves,
 } from '../../component';
 import { databaseRef } from '../../config';
-import { getDetail } from '../../redux/action/DetailAction';
+import { getDetail, getDetailLoading } from '../../redux/action/DetailAction';
 import {
   colors, fonts, pokemonColors, windowWidth,
 } from '../../utils';
@@ -21,6 +21,7 @@ import {
 function PokemonDetailScreen({ navigation, route }) {
   const dispatch = useDispatch();
   const { id } = route.params;
+  const { uid } = route.params;
   const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemonDetail);
   const loading = useSelector((state) => state.dataPokemonDetail.loading);
   const [menu, setMenu] = useState('About');
@@ -42,7 +43,7 @@ function PokemonDetailScreen({ navigation, route }) {
   };
 
   const savePokemon = async () => {
-    const reference = databaseRef().ref('/pokeBag');
+    const reference = databaseRef().ref(`/pokeBag/${uid}`);
     const ratio = Math.floor(Math.random() * 11);
     await animate();
     try {
@@ -108,13 +109,17 @@ function PokemonDetailScreen({ navigation, route }) {
 
   useEffect(() => {
     dispatch(getDetail(id));
-    const reference = databaseRef().ref('/pokeBag');
+    dispatch(getDetailLoading(true));
+    const reference = databaseRef().ref(`/pokeBag/${uid}`);
     reference.on('value', (snapshot) => {
-      checkPokemon(snapshot.val());
+      if (snapshot.val()) {
+        checkPokemon(snapshot.val());
+        dispatch(getDetailLoading(false));
+      }
+      dispatch(getDetailLoading(false));
     });
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [dispatch, disableCatch]);
 
   return loading ? <Loading /> : (
     <View style={bgStyles}>

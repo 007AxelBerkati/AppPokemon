@@ -7,7 +7,8 @@ import { Header, Loading, PokemonCard } from '../../component';
 import { databaseRef } from '../../config/Firebase';
 import { colors, fonts, showError } from '../../utils';
 
-function PokebagScreen({ navigation }) {
+function PokebagScreen({ navigation, route }) {
+  const { uid } = route.params;
   const [pokebag, setPokebag] = useState([]);
   const [key, setKey] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,7 +23,7 @@ function PokebagScreen({ navigation }) {
 
   const fetchPokeBagData = async () => {
     setLoading(true);
-    const reference = databaseRef().ref('/pokeBag');
+    const reference = databaseRef().ref(`/pokeBag/${uid}`);
     reference.on('value', (snapshot) => {
       if (snapshot.val()) {
         GetData(snapshot.val());
@@ -47,7 +48,7 @@ function PokebagScreen({ navigation }) {
 
   const removePokemon = async () => {
     try {
-      await databaseRef().ref(`/pokeBag/${id}`).remove();
+      await databaseRef().ref(`/pokeBag/${uid}/${id}`).remove();
       fetchPokeBagData();
       setModalVisible(false);
     } catch (error) {
