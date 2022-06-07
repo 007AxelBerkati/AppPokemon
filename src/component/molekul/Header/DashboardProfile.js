@@ -1,8 +1,10 @@
 import React from 'react';
 import {
+  Image,
   StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { IconApp2 } from '../../../assets';
 import { colors, fonts } from '../../../utils';
 
 function DashboardProfile({ title, onPress }) {
@@ -10,6 +12,7 @@ function DashboardProfile({ title, onPress }) {
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.name}>{title}</Text>
+        <Image source={IconApp2} style={{ width: 30, height: 30 }} />
       </View>
       <TouchableOpacity onPress={onPress}>
         <Icon name="logout" size={25} />
@@ -34,8 +37,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    flexDirection: 'row',
     marginLeft: -5,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 
   avatar: {
@@ -52,6 +57,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
     textShadowOffset: { width: 5, height: 5 },
     marginTop: 4,
+    textAlign: 'center',
   },
   icon: {
     width: 40,

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, Text, View,
 } from 'react-native';
-import { colors } from '../../../utils';
+import { colors, fonts } from '../../../utils';
 import { ButtonComponent } from '../../atoms';
 
 export default function Footer({
@@ -19,7 +19,7 @@ export default function Footer({
         style={styles.buttonPagination}
       />
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Text>{currentPage}</Text>
+        <Text style={styles.textPagination}>{currentPage}</Text>
       </View>
       <ButtonComponent
         disabled={dataPokemon?.hasMore}
@@ -27,7 +27,6 @@ export default function Footer({
         style={styles.buttonPagination}
         title="Next"
       />
-
     </View>
   );
 }
@@ -44,6 +43,14 @@ const styles = StyleSheet.create({
 
   buttonPagination: {
     width: '30%',
+  },
+
+  textPagination: {
+    fontSize: 20,
+    fontFamily: fonts.secondary.pokemonStyle2,
+    color: colors.text.tertiary,
+    textAlign: 'center',
+
   },
 
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { colors, fonts } from '../../../utils';
 import { ButtonComponent, Gap } from '../../atoms';
-import { colors } from '../../../utils';
 import DarkProfile from './DarkProfile';
 import DashboardProfile from './DashboardProfile';
 
@@ -31,10 +31,14 @@ export default function Header({
 const styles = StyleSheet.create({
   text: (type) => ({
     fontSize: 20,
-    color: type === 'dark' ? colors.text.primary : colors.text.black,
+    color: type === 'dark' ? colors.text.primary : colors.text.tertiary,
     textAlign: 'center',
     flex: 1,
     textTransform: 'capitalize',
+    fontFamily: fonts.secondary.pokemonStyle2,
+    textShadowColor: colors.shadowText,
+    textShadowRadius: 10,
+    textShadowOffset: { width: 5, height: 5 },
   }),
 
   container: (type) => ({

@@ -70,16 +70,20 @@ function PokemonDetailScreen({ navigation, route }) {
     }
   };
 
-  const checkPokemon = (item) => {
+  const checkPokemon = async (item) => {
     let keyFirebase = [];
     keyFirebase = Object.keys(item);
-    for (let i = 0; i < keyFirebase.length; i++) {
-      if (item[keyFirebase[i]].name.includes(pokemonDetail?.name)) {
-        setDisableCatch(true);
+    for (let i = 0; i < keyFirebase?.length; i++) {
+      if (item[keyFirebase[i]]?.id === pokemonDetail?.id) {
+        disableCatchChange();
+        console.log(true);
       }
     }
   };
 
+  const disableCatchChange = async () => {
+    setDisableCatch(true);
+  };
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
@@ -113,12 +117,20 @@ function PokemonDetailScreen({ navigation, route }) {
   ).start();
 
   useEffect(() => {
-    dispatch(getDetail(id));
-    databaseRef().ref(`/pokeBag/${uid}`).on('value', (snapshot) => {
-      if (snapshot.val()) {
-        checkPokemon(snapshot.val());
-      }
-    });
+    const test = async () => {
+      dispatch(getDetail(id));
+
+      // dispatch(getDetail(id));
+      databaseRef().ref(`/pokeBag/${uid}`).on('value', async (snapshot) => {
+        if (snapshot.val()) {
+          await checkPokemon(snapshot.val());
+        }
+      });
+    };
+
+    test();
+
+    console.log(disableCatch);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

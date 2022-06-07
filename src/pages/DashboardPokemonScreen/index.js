@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   FlatList, StatusBar, StyleSheet, View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ILNullPhoto } from '../../assets';
 import {
-  ButtonComponent, Footer, Header, Loading,
+  ButtonComponent, Footer, Header,
 } from '../../component';
 import PokemonCard from '../../component/molekul/PokemonCard';
 import { signOut } from '../../config';
@@ -29,15 +30,17 @@ function DashboardPokemonScreen({ navigation }) {
   const [nextPage, setNextPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const onHandleNext = () => {
+  const onHandleNext = useCallback(() => {
     setNextPage(nextPage + 20);
     setCurrentPage(currentPage + 1);
-  };
+    dispatch(getPokemon(nextPage));
+  }, [nextPage, currentPage, dispatch]);
 
-  const onHandlePrevious = () => {
+  const onHandlePrevious = useCallback(() => {
     setNextPage(nextPage - 20);
     setCurrentPage(currentPage - 1);
-  };
+    dispatch(getPokemon(nextPage));
+  }, [nextPage, currentPage, dispatch]);
 
   const getUserData = () => {
     getData('user').then((res) => {
@@ -64,30 +67,35 @@ function DashboardPokemonScreen({ navigation }) {
     onLogScreenView('DashboardScreen');
     getUserData();
     dispatch(getPokemon(nextPage));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nextPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  return loading ? <Loading /> : (
+  return (
     <View style={styles.container}>
       <StatusBar backgroundColor={colors.background.primary} barStyle="dark-content" />
       <Header type="dashboard-profile" title="My Pokemon" onPress={logOut} />
-      <FlatList
-        data={dataPokemon.pokemon}
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(pokemon) => String(pokemon.id)}
-        renderItem={({ item }) => <PokemonCard pokemon={item} onPress={() => navigation.navigate('PokemonDetailScreen', { id: item.id, uid: profile.uid })} />}
-        // eslint-disable-next-line react/no-unstable-nested-components
-        ListFooterComponent={({ item }) => (
-          <Footer
-            dataPokemon={item}
-            onHandleNext={onHandleNext}
-            onHandlePrevious={onHandlePrevious}
-            currentPage={currentPage}
-          />
-        )}
 
-      />
+      {
+          loading ? (<ActivityIndicator />) : (
+            <FlatList
+              data={dataPokemon.pokemon}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(pokemon) => String(pokemon.id)}
+              renderItem={({ item }) => <PokemonCard pokemon={item} onPress={() => navigation.navigate('PokemonDetailScreen', { id: item.id, uid: profile.uid })} />}
+        // eslint-disable-next-line react/no-unstable-nested-components
+              ListFooterComponent={({ item }) => (
+                <Footer
+                  dataPokemon={item}
+                  onHandleNext={onHandleNext}
+                  onHandlePrevious={onHandlePrevious}
+                  currentPage={currentPage}
+                />
+              )}
+            />
+          )
+        }
+
       <ButtonComponent icon="bag-personal" type="floating-btn" onPress={goToPokebag} />
     </View>
   );
@@ -99,7 +107,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background.primary,
-    // padding: 10,
   },
   content: {
     flex: 1,

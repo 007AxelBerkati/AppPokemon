@@ -65,7 +65,7 @@ function PokebagScreen({ navigation, route }) {
 
   return loading ? <Loading /> : (
     <View style={styles.pages}>
-      <Header type="dashboard-profile" title="My Pokemon" />
+      <Header title="Your Pokemon" onPress={() => navigation.goBack()} />
       {
         pokebag.length === 0 ? (
           <View style={styles.emptyContainer}>

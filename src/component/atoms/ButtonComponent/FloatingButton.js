@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { colors } from '../../../utils';
 
-function FloatingButton({ onPress, icon }) {
+function FloatingButton1({ onPress, icon }) {
   console.log('floating button');
   return (
     <FAB
@@ -14,7 +14,7 @@ function FloatingButton({ onPress, icon }) {
   );
 }
 
-export default FloatingButton;
+export const FloatingButton = React.memo(FloatingButton1);
 
 const styles = StyleSheet.create({
   fab: {

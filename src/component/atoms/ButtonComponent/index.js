@@ -3,14 +3,16 @@ import {
   StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import { colors, fonts } from '../../../utils';
-import FloatingButton from './FloatingButton';
 
 import IconButton from './IconButton';
 import IconOnly from './IconOnly';
+import { FloatingButton } from './FloatingButton';
 
 export default function ButtonComponent({
   type, title, onPress, icon, disable, nonButton, iconHeight, iconWidth, label, style,
 }) {
+  console.log('Button component rerender');
+
   if (type === 'icon-only') {
     return <IconOnly icon={icon} onPress={onPress} />;
   }
@@ -38,7 +40,6 @@ export default function ButtonComponent({
     );
   }
 
-  console.log('TestButton');
   return (
     <TouchableOpacity style={{ ...styles.container(type), ...style }} onPress={onPress}>
       <Text style={styles.text(type)}>{title}</Text>
