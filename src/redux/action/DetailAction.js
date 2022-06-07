@@ -33,8 +33,7 @@ export const getDetail = (id, uid) => async (dispatch) => {
         const checkPokemon = async (item) => {
           let keyFirebase = [];
           keyFirebase = Object.keys(item);
-          // eslint-disable-next-line no-plusplus
-          for (let i = 0; i < keyFirebase?.length; i++) {
+          for (let i = 0; i < keyFirebase?.length; i += 1) {
             if (item[keyFirebase[i]]?.id === res.data.id) {
               dispatch(getDisableCatch(true));
               return;

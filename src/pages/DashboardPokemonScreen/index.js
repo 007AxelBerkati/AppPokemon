@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList, StatusBar, StyleSheet, View,
@@ -17,10 +17,8 @@ import {
 
 function DashboardPokemonScreen({ navigation }) {
   const dispatch = useDispatch();
-
   const dataPokemon = useSelector((state) => state.dataPokemon);
   const loading = useSelector((state) => state.dataPokemon.loading);
-
   const [profile, setProfile] = useState({
     photo: ILNullPhoto,
     fullname: '',
@@ -30,17 +28,15 @@ function DashboardPokemonScreen({ navigation }) {
   const [nextPage, setNextPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const onHandleNext = useCallback(() => {
+  const onHandleNext = () => {
     setNextPage(nextPage + 20);
     setCurrentPage(currentPage + 1);
-    dispatch(getPokemon(nextPage));
-  }, [nextPage, currentPage, dispatch]);
+  };
 
-  const onHandlePrevious = useCallback(() => {
+  const onHandlePrevious = () => {
     setNextPage(nextPage - 20);
     setCurrentPage(currentPage - 1);
-    dispatch(getPokemon(nextPage));
-  }, [nextPage, currentPage, dispatch]);
+  };
 
   const getUserData = () => {
     getData('user').then((res) => {
@@ -49,7 +45,6 @@ function DashboardPokemonScreen({ navigation }) {
       setProfile(res);
     });
   };
-
   const logOut = () => {
     signOut().then(() => {
       removeData('user').then(() => navigation.replace('LoginScreen'));
@@ -58,17 +53,15 @@ function DashboardPokemonScreen({ navigation }) {
         showError(err.message);
       });
   };
-
   const goToPokebag = () => {
     navigation.navigate('PokebagScreen', { uid: profile.uid });
   };
-
   useEffect(() => {
     onLogScreenView('DashboardScreen');
     getUserData();
     dispatch(getPokemon(nextPage));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextPage]);
 
   return (
     <View style={styles.container}>

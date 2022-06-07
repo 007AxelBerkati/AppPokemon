@@ -8,6 +8,7 @@ import DashboardProfile from './DashboardProfile';
 export default function Header({
   onPress, title, type, photo, desc,
 }) {
+  console.log('Header rerender');
   if (type === 'dark-profile') {
     return <DarkProfile onPress={onPress} title={title} desc={desc} photo={photo} />;
   }
