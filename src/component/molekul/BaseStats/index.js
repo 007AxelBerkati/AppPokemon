@@ -7,7 +7,6 @@ import { colors, fonts } from '../../../utils';
 
 export default function BaseStats(props) {
   const { item } = props;
-
   return (
     <ScrollView>
       {

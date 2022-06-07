@@ -1,9 +1,13 @@
-import { GET_POKEMON_DETAIL_FAILURE, GET_POKEMON_DETAIL_LOADING, GET_POKEMON_DETAIL_SUCCESS } from '../types';
+import {
+  GET_DISABLE_CATCH,
+  GET_POKEMON_DETAIL_FAILURE, GET_POKEMON_DETAIL_LOADING, GET_POKEMON_DETAIL_SUCCESS,
+} from '../types';
 
 const initialPokemonDetailState = {
   pokemonDetail: {},
   loading: false,
   error: null,
+  isDisable: false,
 };
 
 export const pokemonDetailReducer = (state = initialPokemonDetailState, action = {}) => {
@@ -24,6 +28,12 @@ export const pokemonDetailReducer = (state = initialPokemonDetailState, action =
         ...state,
         error: action.error,
         loading: false,
+      };
+
+    case GET_DISABLE_CATCH:
+      return {
+        ...state,
+        isDisable: action.isDisable,
       };
     default:
       return state;

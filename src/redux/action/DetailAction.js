@@ -1,6 +1,9 @@
 import axios from 'axios';
-import { GET_POKEMON_API } from '../../config';
-import { GET_POKEMON_DETAIL_FAILURE, GET_POKEMON_DETAIL_LOADING, GET_POKEMON_DETAIL_SUCCESS } from '../types';
+import { databaseRef, GET_POKEMON_API } from '../../config';
+import {
+  GET_DISABLE_CATCH,
+  GET_POKEMON_DETAIL_FAILURE, GET_POKEMON_DETAIL_LOADING, GET_POKEMON_DETAIL_SUCCESS,
+} from '../types';
 
 export const getDetailSuccess = (data) => ({
   type: GET_POKEMON_DETAIL_SUCCESS,
@@ -17,11 +20,35 @@ export const getDetailLoading = (loading) => ({
   loading,
 });
 
-export const getDetail = (id) => async (dispatch) => {
+export const getDisableCatch = (isDisable) => ({
+  type: GET_DISABLE_CATCH,
+  isDisable,
+});
+
+export const getDetail = (id, uid) => async (dispatch) => {
   dispatch(getDetailLoading(true));
   await axios.get(`${GET_POKEMON_API}/${id}`).then(
     async (res) => {
       if (res.data) {
+        const checkPokemon = async (item) => {
+          let keyFirebase = [];
+          keyFirebase = Object.keys(item);
+          // eslint-disable-next-line no-plusplus
+          for (let i = 0; i < keyFirebase?.length; i++) {
+            if (item[keyFirebase[i]]?.id === res.data.id) {
+              dispatch(getDisableCatch(true));
+              return;
+            }
+            dispatch(getDisableCatch(false));
+          }
+        };
+
+        databaseRef().ref(`/pokeBag/${uid}`).on('value', async (snapshot) => {
+          if (snapshot.val()) {
+            await checkPokemon(snapshot.val());
+          }
+        });
+
         const data = {
           ...res.data,
           type: res.data.types[0].type.name,

@@ -13,7 +13,7 @@ import {
   About, BaseStats, Loading, Moves,
 } from '../../component';
 import { databaseRef } from '../../config';
-import { getDetail } from '../../redux/action/DetailAction';
+import { getDetail, getDisableCatch } from '../../redux/action/DetailAction';
 import {
   colors, fonts, pokemonColors, windowWidth,
 } from '../../utils';
@@ -25,8 +25,8 @@ function PokemonDetailScreen({ navigation, route }) {
 
   const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemonDetail);
   const loading = useSelector((state) => state.dataPokemonDetail.loading);
+  const disableCatch = useSelector((state) => state.dataPokemonDetail.isDisable);
 
-  const [disableCatch, setDisableCatch] = useState(false);
   const [menu, setMenu] = useState('About');
 
   const spinValue = useState(new Animated.Value(0))[0];
@@ -58,7 +58,7 @@ function PokemonDetailScreen({ navigation, route }) {
           imgUrl: pokemonDetail?.sprites?.other['official-artwork'].front_default,
           types: pokemonDetail.types,
         });
-        setDisableCatch(true);
+        dispatch(getDisableCatch(true));
         await animate();
         Alert.alert('Success', 'Berhasil Menangkap');
       } else {
@@ -70,20 +70,6 @@ function PokemonDetailScreen({ navigation, route }) {
     }
   };
 
-  const checkPokemon = async (item) => {
-    let keyFirebase = [];
-    keyFirebase = Object.keys(item);
-    for (let i = 0; i < keyFirebase?.length; i++) {
-      if (item[keyFirebase[i]]?.id === pokemonDetail?.id) {
-        disableCatchChange();
-        console.log(true);
-      }
-    }
-  };
-
-  const disableCatchChange = async () => {
-    setDisableCatch(true);
-  };
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
@@ -117,20 +103,7 @@ function PokemonDetailScreen({ navigation, route }) {
   ).start();
 
   useEffect(() => {
-    const test = async () => {
-      dispatch(getDetail(id));
-
-      // dispatch(getDetail(id));
-      databaseRef().ref(`/pokeBag/${uid}`).on('value', async (snapshot) => {
-        if (snapshot.val()) {
-          await checkPokemon(snapshot.val());
-        }
-      });
-    };
-
-    test();
-
-    console.log(disableCatch);
+    dispatch(getDetail(id, uid));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
