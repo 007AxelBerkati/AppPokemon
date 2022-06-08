@@ -8,6 +8,7 @@ import { ButtonComponent } from '../../atoms';
 function Footer({
   dataPokemon, onHandleNext, onHandlePrevious, currentPage,
 }) {
+  console.log('Rerender Footer');
   return (
     <View style={styles.footerContent}>
 

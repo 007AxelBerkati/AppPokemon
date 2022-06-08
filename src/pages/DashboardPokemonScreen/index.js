@@ -1,19 +1,19 @@
+import LottieView from 'lottie-react-native';
 import React, {
-  useEffect, useState, memo, useCallback,
+  memo, useCallback, useEffect, useState,
 } from 'react';
 import {
-  ActivityIndicator,
-  FlatList, StatusBar, StyleSheet, View,
+  FlatList, StatusBar, StyleSheet, Text, View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { ILNullPhoto } from '../../assets';
+import { ILNullPhoto, pikachu } from '../../assets';
 import {
   ButtonComponent, Footer, Header, PokemonCard,
 } from '../../component';
 import { GET_POKEMON_API, signOut } from '../../config';
 import { getPokemon } from '../../redux';
 import {
-  colors, getData, onLogScreenView, removeData, showError,
+  colors, fonts, getData, onLogScreenView, removeData, showError, windowHeight, windowWidth,
 } from '../../utils';
 
 function DashboardPokemonScreen({ navigation }) {
@@ -29,15 +29,15 @@ function DashboardPokemonScreen({ navigation }) {
   });
   const [currentPage, setCurrentPage] = useState(1);
 
-  const onHandleNext = useCallback(() => {
+  const onHandleNext = () => {
     setCurrentPage(currentPage + 1);
     dispatch(getPokemon(pagination.next));
-  }, [currentPage, dispatch, pagination.next]);
+  };
 
-  const onHandlePrevious = useCallback(() => {
+  const onHandlePrevious = () => {
     setCurrentPage(currentPage - 1);
     dispatch(getPokemon(pagination.previous));
-  }, [currentPage, dispatch, pagination.previous]);
+  };
 
   const getUserData = () => {
     getData('user').then((res) => {
@@ -72,7 +72,12 @@ function DashboardPokemonScreen({ navigation }) {
       <Header type="dashboard-profile" title="My Pokemon" onPress={logOut} />
 
       {
-          loading ? (<ActivityIndicator />) : (
+          loading ? (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <LottieView source={pikachu} autoPlay loop style={styles.image} />
+              <Text style={styles.title}>Loading...</Text>
+            </View>
+          ) : (
             <FlatList
               data={dataPokemon.pokemon}
               numColumns={2}
@@ -107,6 +112,22 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     backgroundColor: colors.background.primary,
+  },
+
+  image: {
+    height: windowHeight * 0.17,
+    width: windowWidth * 0.3,
+    alignSelf: 'center',
+  },
+
+  title: {
+    fontSize: 12,
+    color: colors.text.tertiary,
+    fontFamily: fonts.secondary.pokemonStyle2,
+    textShadowColor: colors.shadowText,
+    textShadowRadius: 10,
+    textShadowOffset: { width: 5, height: 5 },
+    marginTop: -30,
   },
 
 });

@@ -15,7 +15,6 @@ function SplashScreen({ navigation }) {
 
     const subscriber = auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log('user : ', user);
         setTimeout(() => {
           navigation.replace('DashboardPokemonScreen');
         }, 3000);
