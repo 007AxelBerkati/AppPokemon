@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
@@ -6,9 +6,9 @@ import { colors, fonts } from '../../../utils';
 
 import IconButton from './IconButton';
 import IconOnly from './IconOnly';
-import { FloatingButton } from './FloatingButton';
+import FloatingButton from './FloatingButton';
 
-export default function ButtonComponent({
+function ButtonComponent({
   type, title, onPress, icon, disable, nonButton, iconHeight, iconWidth, label, style,
 }) {
   console.log('Button component rerender');
@@ -46,6 +46,8 @@ export default function ButtonComponent({
     </TouchableOpacity>
   );
 }
+
+export default memo(ButtonComponent);
 
 const styles = StyleSheet.create({
   container: (type) => ({

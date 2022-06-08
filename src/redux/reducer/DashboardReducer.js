@@ -2,7 +2,7 @@ import { GET_POKEMON_FAILURE, GET_POKEMON_LOADING, GET_POKEMON_SUCCESS } from '.
 
 const initialPokemonState = {
   pokemon: [],
-  loading: false,
+  loading: true,
   error: null,
   pagination: {},
 };

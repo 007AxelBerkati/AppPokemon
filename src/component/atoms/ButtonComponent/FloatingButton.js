@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { colors } from '../../../utils';
 
-function FloatingButton1({ onPress, icon }) {
+function FloatingButton({ onPress, icon }) {
   console.log('floating button');
   return (
     <FAB
@@ -14,7 +14,7 @@ function FloatingButton1({ onPress, icon }) {
   );
 }
 
-export const FloatingButton = React.memo(FloatingButton1);
+export default memo(FloatingButton);
 
 const styles = StyleSheet.create({
   fab: {

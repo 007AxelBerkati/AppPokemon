@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   FlatList, Modal, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
@@ -29,7 +29,6 @@ function PokebagScreen({ navigation, route }) {
 
   useEffect(() => {
     fetchPokeBagData();
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -50,22 +49,26 @@ function PokebagScreen({ navigation, route }) {
     }
   };
 
-  const detailPokemon = () => {
+  const detailPokemon = useCallback(() => {
     navigation.navigate('PokemonDetailScreen', {
       id: pokebag[id].id,
       uid,
     });
     setModalVisible(false);
-  };
+  }, [id, navigation, pokebag, uid]);
 
   const openModal = (item) => {
     setId(item);
     setModalVisible(true);
   };
 
+  const goBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   return loading ? <Loading /> : (
     <View style={styles.pages}>
-      <Header title="Your Pokemon" onPress={() => navigation.goBack()} />
+      <Header title="Your Pokemon" onPress={goBack} />
       {
         pokebag.length === 0 ? (
           <View style={styles.emptyContainer}>
@@ -90,7 +93,6 @@ function PokebagScreen({ navigation, route }) {
 
       <Modal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
         animationType="slide"
         transparent
       >

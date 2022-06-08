@@ -1,4 +1,6 @@
-import React, { useEffect, useState, memo } from 'react';
+import React, {
+  useEffect, useState, memo, useCallback,
+} from 'react';
 import {
   ActivityIndicator,
   FlatList, StatusBar, StyleSheet, View,
@@ -27,15 +29,15 @@ function DashboardPokemonScreen({ navigation }) {
   });
   const [currentPage, setCurrentPage] = useState(1);
 
-  const onHandleNext = () => {
+  const onHandleNext = useCallback(() => {
     setCurrentPage(currentPage + 1);
     dispatch(getPokemon(pagination.next));
-  };
+  }, [currentPage, dispatch, pagination.next]);
 
-  const onHandlePrevious = () => {
+  const onHandlePrevious = useCallback(() => {
     setCurrentPage(currentPage - 1);
     dispatch(getPokemon(pagination.previous));
-  };
+  }, [currentPage, dispatch, pagination.previous]);
 
   const getUserData = () => {
     getData('user').then((res) => {
@@ -44,23 +46,25 @@ function DashboardPokemonScreen({ navigation }) {
       setProfile(res);
     });
   };
-  const logOut = () => {
+
+  const logOut = useCallback(() => {
     signOut().then(() => {
       removeData('user').then(() => navigation.replace('LoginScreen'));
     })
       .catch((err) => {
         showError(err.message);
       });
-  };
-  const goToPokebag = () => {
+  }, [navigation]);
+
+  const goToPokebag = useCallback(() => {
     navigation.navigate('PokebagScreen', { uid: profile.uid });
-  };
+  }, [navigation, profile.uid]);
+
   useEffect(() => {
     onLogScreenView('DashboardScreen');
     getUserData();
     dispatch(getPokemon(`${GET_POKEMON_API}?offset=${0}&limit=${20}`));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   return (
     <View style={styles.container}>
@@ -75,7 +79,7 @@ function DashboardPokemonScreen({ navigation }) {
               showsVerticalScrollIndicator={false}
               keyExtractor={(pokemon) => String(pokemon.id)}
               renderItem={({ item }) => <PokemonCard pokemon={item} onPress={() => navigation.navigate('PokemonDetailScreen', { id: item.id, uid: profile.uid })} />}
-        // eslint-disable-next-line react/no-unstable-nested-components
+              // eslint-disable-next-line react/no-unstable-nested-components
               ListFooterComponent={({ item }) => (
                 <Footer
                   dataPokemon={item}

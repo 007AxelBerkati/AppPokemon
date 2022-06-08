@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors, fonts } from '../../../utils';
 import { ButtonComponent, Gap } from '../../atoms';
 import DarkProfile from './DarkProfile';
 import DashboardProfile from './DashboardProfile';
 
-export default function Header({
+function Header({
   onPress, title, type, photo, desc,
 }) {
   console.log('Header rerender');
@@ -28,6 +28,8 @@ export default function Header({
     </View>
   );
 }
+
+export default memo(Header);
 
 const styles = StyleSheet.create({
   text: (type) => ({

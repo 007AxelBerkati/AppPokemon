@@ -5,7 +5,7 @@ import {
 
 const initialPokemonDetailState = {
   pokemonDetail: {},
-  loading: false,
+  loading: true,
   error: null,
   isDisable: false,
 };

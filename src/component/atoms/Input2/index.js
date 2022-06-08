@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { colors, fonts } from '../../../utils';
@@ -35,7 +35,7 @@ function Input2({
   );
 }
 
-export default Input2;
+export default memo(Input2);
 
 const styles = StyleSheet.create({
   input: {

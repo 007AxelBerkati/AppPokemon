@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   StyleSheet, Text, View,
 } from 'react-native';
 import { colors, fonts } from '../../../utils';
 import { ButtonComponent } from '../../atoms';
 
-export default function Footer({
+function Footer({
   dataPokemon, onHandleNext, onHandlePrevious, currentPage,
 }) {
-  console.log('Footer');
   return (
     <View style={styles.footerContent}>
 
@@ -30,6 +29,8 @@ export default function Footer({
     </View>
   );
 }
+
+export default memo(Footer);
 
 const styles = StyleSheet.create({
   footerContent: {

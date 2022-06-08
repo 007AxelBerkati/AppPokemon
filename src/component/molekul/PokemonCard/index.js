@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Image, StyleSheet, Text, TouchableWithoutFeedback, View,
 } from 'react-native';
 import { pokeBall } from '../../../assets';
 import { colors, fonts, pokemonColors } from '../../../utils';
 
-export default function PokemonCard({ pokemon, onPress }) {
+function PokemonCard({ pokemon, onPress }) {
   const pokemonColor = pokemonColors[pokemon.type];
   const bgStyles = { backgroundColor: pokemonColor, ...styles.bgStyles };
-
-  console.log('Pokemon Card');
 
   return (
     <TouchableWithoutFeedback
@@ -42,6 +40,8 @@ export default function PokemonCard({ pokemon, onPress }) {
     </TouchableWithoutFeedback>
   );
 }
+
+export default memo(PokemonCard);
 
 const styles = StyleSheet.create({
   card__imagePokemon: {

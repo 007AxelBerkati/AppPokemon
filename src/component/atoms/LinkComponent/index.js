@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { fonts } from '../../../utils';
 
-export default function LinkComponent({
+function LinkComponent({
   title, size, align, onPress, color, disable, style,
 }) {
   return (
@@ -11,6 +11,8 @@ export default function LinkComponent({
     </TouchableOpacity>
   );
 }
+
+export default memo(LinkComponent);
 
 const styles = StyleSheet.create({
   text: (size, align, color) => ({
