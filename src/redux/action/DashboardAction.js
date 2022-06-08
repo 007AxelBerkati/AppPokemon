@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { GET_POKEMON_API } from '../../config';
 import { GET_POKEMON_FAILURE, GET_POKEMON_LOADING, GET_POKEMON_SUCCESS } from '../types';
 
-export const getPokemonSuccess = (pokemon) => ({
+export const getPokemonSuccess = (pokemon, pagination) => ({
   type: GET_POKEMON_SUCCESS,
   pokemon,
+  pagination,
 });
 
 export const getPokemonFailure = (error) => ({
@@ -17,11 +17,16 @@ export const getPokemonLoading = (loading) => ({
   loading,
 });
 
-export const getPokemon = (nextPage) => async (dispatch) => {
+export const getPokemon = (url) => async (dispatch) => {
   dispatch(getPokemonLoading(true));
-  await axios.get(`${GET_POKEMON_API}?offset=${nextPage}&limit=20`).then(
+  await axios.get(url).then(
     async (res) => {
       const result = await res.data.results;
+
+      const resultPagination = {
+        next: res.data.next,
+        previous: res.data.previous,
+      };
 
       const pokemonArray = [];
       // eslint-disable-next-line no-restricted-syntax
@@ -38,7 +43,7 @@ export const getPokemon = (nextPage) => async (dispatch) => {
         });
       }
 
-      dispatch(getPokemonSuccess(pokemonArray));
+      dispatch(getPokemonSuccess(pokemonArray, resultPagination));
     },
   ).catch(
     (error) => {

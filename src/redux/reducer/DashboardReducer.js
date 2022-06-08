@@ -4,6 +4,7 @@ const initialPokemonState = {
   pokemon: [],
   loading: false,
   error: null,
+  pagination: {},
 };
 
 export const pokemonReducer = (state = initialPokemonState, action = {}) => {
@@ -18,6 +19,7 @@ export const pokemonReducer = (state = initialPokemonState, action = {}) => {
         ...state,
         pokemon: action.pokemon,
         loading: action.loading,
+        pagination: action.pagination,
       };
     case GET_POKEMON_FAILURE:
       return {

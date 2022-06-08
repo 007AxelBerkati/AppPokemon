@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import {
   ActivityIndicator,
   FlatList, StatusBar, StyleSheet, View,
@@ -6,10 +6,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { ILNullPhoto } from '../../assets';
 import {
-  ButtonComponent, Footer, Header,
+  ButtonComponent, Footer, Header, PokemonCard,
 } from '../../component';
-import PokemonCard from '../../component/molekul/PokemonCard';
-import { signOut } from '../../config';
+import { GET_POKEMON_API, signOut } from '../../config';
 import { getPokemon } from '../../redux';
 import {
   colors, getData, onLogScreenView, removeData, showError,
@@ -19,23 +18,23 @@ function DashboardPokemonScreen({ navigation }) {
   const dispatch = useDispatch();
   const dataPokemon = useSelector((state) => state.dataPokemon);
   const loading = useSelector((state) => state.dataPokemon.loading);
+  const pagination = useSelector((state) => state.dataPokemon.pagination);
   const [profile, setProfile] = useState({
     photo: ILNullPhoto,
     fullname: '',
     bio: '',
     uid: '',
   });
-  const [nextPage, setNextPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
   const onHandleNext = () => {
-    setNextPage(nextPage + 20);
     setCurrentPage(currentPage + 1);
+    dispatch(getPokemon(pagination.next));
   };
 
   const onHandlePrevious = () => {
-    setNextPage(nextPage - 20);
     setCurrentPage(currentPage - 1);
+    dispatch(getPokemon(pagination.previous));
   };
 
   const getUserData = () => {
@@ -59,9 +58,9 @@ function DashboardPokemonScreen({ navigation }) {
   useEffect(() => {
     onLogScreenView('DashboardScreen');
     getUserData();
-    dispatch(getPokemon(nextPage));
+    dispatch(getPokemon(`${GET_POKEMON_API}?offset=${0}&limit=${20}`));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nextPage]);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -94,7 +93,7 @@ function DashboardPokemonScreen({ navigation }) {
   );
 }
 
-export default DashboardPokemonScreen;
+export default memo(DashboardPokemonScreen);
 
 const styles = StyleSheet.create({
   container: {
