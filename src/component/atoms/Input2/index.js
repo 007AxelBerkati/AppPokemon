@@ -6,7 +6,7 @@ import { colors, fonts } from '../../../utils';
 function Input2({
   onChangeText, value, label, onBlur, cannotEdited, secureTextEntry, leftIcon,
 }) {
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(true);
   return (
     <View>
       <TextInput

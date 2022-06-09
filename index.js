@@ -12,14 +12,12 @@ import { name as appName } from './app.json';
 
 PushNotification.configure({
   onNotification() {
-    // console.log('NOTIFICATION:', notification);
   },
   // eslint-disable-next-line no-undef
   requestPermissions: Platform.OS === 'ios',
 });
 
 messaging().setBackgroundMessageHandler(async () => {
-  // console.log('Message handled in the background!', remoteMessage);
 });
 
 export default function Main() {
