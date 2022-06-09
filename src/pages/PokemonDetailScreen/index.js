@@ -311,34 +311,3 @@ const styles = StyleSheet.create({
   },
 
 });
-
-// import { StyleSheet, Text, View } from 'react-native';
-// import React, { useEffect } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { getDetail } from '../../redux/action/DetailAction';
-// import { pokemonColors } from '../../utils';
-
-// function PokemonDetailScreen({ route }) {
-//   const dispatch = useDispatch();
-//   const { id } = route.params;
-//   const pokemonDetail = useSelector((state) => state.dataPokemonDetail.pokemon);
-//   const loading = useSelector((state) => state.dataPokemonDetail.loading);
-
-//   const pokemonColor = pokemonColors[pokemonDetail.types['0'].type.name];
-
-//   useEffect(() => {
-//     dispatch(getDetail(id));
-//     console.log('pokemonDetail : ', pokemonDetail);
-//   // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
-
-//   return (
-//     <View>
-//       <Text>PokemonDetailScreen</Text>
-//     </View>
-//   );
-// }
-
-// export default PokemonDetailScreen;
-
-// const styles = StyleSheet.create({});
