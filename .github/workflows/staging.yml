@@ -23,7 +23,7 @@ jobs:
         run: |
           cd android && chmod +x ./gradlew && ./gradlew assembleRelease
       - name: Upload Artifact
-        uses: actions/upload-artifact@v1
+        uses: wzieba/AppCenter-Github-Action@v1
         with:
           name: 006/MyPokemon
           token: ${{secrets.APP_CENTER_TOKEN}}
