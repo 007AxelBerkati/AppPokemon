@@ -25,7 +25,7 @@ jobs:
       - name: Upload Artifact
         uses: wzieba/AppCenter-Github-Action@v1
         with:
-          name: 006/MyPokemon
+          appName: 006/MyPokemon
           token: ${{secrets.APP_CENTER_TOKEN}}
           group: staging
           file: android/app/build/outputs/apk/release/app-release.apk
